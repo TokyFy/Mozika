@@ -3,6 +3,7 @@ import path from "node:path";
 import * as mm from 'music-metadata';
 import {createHash} from "node:crypto";
 import sharp from "sharp";
+import {APP_DATA_DIR} from "./Contant";
 
 async function audioList(dir: string, callback: (musics: IMetadata | undefined) => void) {
     const files = fs.readdirSync(dir);
@@ -48,7 +49,7 @@ async function metadata(songPath: string): Promise<IMetadata | undefined> {
         let picture = "";
 
         if (metadata.common!.picture) {
-            picture = await cacheImage(metadata.common!.picture[0].data, `${createImageHash(songPath)}.jpg`)
+            picture = await cacheImage(metadata.common!.picture[0].data, `${createImageHash(songPath)}.jpg` , path.join(APP_DATA_DIR , "/cache"))
         }
 
         if(Number(metadata.format!.duration) >= 10 * 60) return
@@ -67,30 +68,19 @@ async function metadata(songPath: string): Promise<IMetadata | undefined> {
     }
 }
 
-async function cacheImage(imageBuffer: Buffer, name: string):Promise<string> {
+async function cacheImage(imageBuffer: Buffer, name: string , location : string):Promise<string> {
 
     try {
-        const OsDataDir = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share");
-        const appDataDir = path.join(OsDataDir, ".mozika/cache")
-        try {
-
-            if (!fs.existsSync(appDataDir)) {
-                fs.mkdirSync(appDataDir, {recursive: true})
-            }
-
-
-            if (imageBuffer.length > 0) {
-                let sharpI = sharp(imageBuffer).resize(400);
-                await sharpI.toFile(path.join(appDataDir, name));
-            }
-
-        } catch (err) {
-            console.log(err)
+        if (!fs.existsSync(location)) {
+            fs.mkdirSync(location, {recursive: true})
         }
 
-        // fs.writeFileSync(path.join(appDataDir , name) , imageBuffer )
+        if (imageBuffer.length > 0) {
+            let sharpI = sharp(imageBuffer).resize(400);
+            await sharpI.toFile(path.join(location, name));
+        }
 
-        return path.join(appDataDir, name);
+        return path.join(location, name);
     } catch (err) {
         // Do thing here
     }

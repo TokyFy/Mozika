@@ -1,9 +1,10 @@
 import {app, BrowserWindow, dialog, ipcMain, shell} from 'electron'
 import {release} from 'node:os'
-import {join} from 'node:path'
+import path, {join} from 'node:path'
 import {update} from './update'
 import {audioList, IMetadata} from "./music";
 import fs from "node:fs"
+import {APP_DATA_DIR} from "./Contant";
 
 const {protocol, net} = require('electron');
 
@@ -185,7 +186,7 @@ ipcMain.handle('scan-musics', async (_event , args) => {
         })
     }
 
-    fs.writeFileSync("./db.json" , JSON.stringify(musics))
+    fs.writeFileSync(path.join(APP_DATA_DIR , "/db.json") , JSON.stringify(musics))
 
     return musics;
 
@@ -194,7 +195,7 @@ ipcMain.handle('scan-musics', async (_event , args) => {
 
 ipcMain.handle('load-musics', async (_event , args) => {
 
-    if(fs.existsSync("./db.json")) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
+    if(fs.existsSync(path.join(APP_DATA_DIR , "/db.json"))) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
 
     return []
 })
