@@ -8,7 +8,7 @@ type ITopBar = {
 function TopBar({onMenuClick} : ITopBar) {
     return (
         <div id="topbar"
-             className="group/top h-8 min-h-[2rem] flex rounded-t-[4px] items-center justify-between px-2  w-full bg-neutral-50">
+             className="group/top h-8 min-h-[2rem] flex rounded-t-[4px] items-center justify-between px-2  w-full bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-100">
 
             <div className="flex items-center ">
                 <Asterisk absoluteStrokeWidth size={18}/>

@@ -4,10 +4,11 @@ import {ipcRenderer} from "electron";
 import {IMetadata} from "../electron/main/music";
 import TopBar from "@/components/Topbar";
 import MusicsList from "@/components/MusicsList";
-import {FolderPlus, FolderSync, FolderX} from "lucide-react";
+import {FolderPlus, FolderSync, FolderX, Sun} from "lucide-react";
 import mousetrap from "mousetrap";
 import {useDebounce} from "use-debounce";
 import Fuse from "fuse.js";
+import ThemeToggler from "@/components/ThemeToggler";
 
 
 type IAppData = {
@@ -75,13 +76,15 @@ function App() {
             ? setAppData({...appData, currentMusic: appData.musics.length - 1}) :
             setAppData({...appData, currentMusic: (appData.currentMusic - 1) % (appData.musics.length + 1)})
     }
-    const shuffleArray = (arrayInput: any[]) => {
+    const shuffleArray = (arrayInput: any[] , constant : number  = -1) => {
 
         const array = [...arrayInput]
 
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            if (i !== constant && j !== constant) {
+                [array[i], array[j]] = [array[j], array[i]];
+            }
         }
 
         return array
@@ -104,13 +107,10 @@ function App() {
         }
     }
 
-    const pause = () => {
-        setAppData({...appData, isPaused: true});
-    }
     const centerList = () => {
         if (listRef.current) {
             // @ts-ignore
-            listRef.current.scrollToItem(appData.currentMusic, "smart");
+            listRef.current.scrollToItem(appData.currentMusic, "auto");
         }
     }
 
@@ -157,9 +157,8 @@ function App() {
                 ? setAppData(
                     {
                         ...appData,
-                        musics: fuse.search(dQuery).map(el => el.item),
-                        currentMusic: 0,
-                        isPaused : true
+                        musics: [...fuse.search(dQuery).map(el => el.item) , appData.musics[appData.currentMusic]],
+                        currentMusic: 0
                     })
                 : setAppData(
                     {
@@ -182,6 +181,7 @@ function App() {
     mousetrap.bind('p', prev);
     mousetrap.bind('+', volumeAdd);
     mousetrap.bind('-', volumeMinus);
+    mousetrap.bind('c', centerList);
     mousetrap.bind('/', (event)=>{
         event.preventDefault();
 
@@ -197,8 +197,7 @@ function App() {
     mousetrap.bind('s', () => {
         setAppData({
             ...appData,
-            musics: [...shuffleArray(appData.musics)],
-            currentMusic: 0
+            musics: [...shuffleArray(appData.musics , appData.currentMusic)],
         })
     });
     mousetrap.bind('o', () => {
@@ -218,51 +217,70 @@ function App() {
                 event.preventDefault()
             }
             setAppData({...appData, isPaused: !appData.isPaused})
-        }
-    );
+        });
 
 
     return (
         <div
-            className='h-full text-neutral-900 flex flex-col overflow-hidden rounded-sm bg-neutral-50 border-4 border-solid border-neutral-200'>
+            id="main-frame"
+            className='h-full text-neutral-900 flex flex-col overflow-hidden rounded-sm border-4 border-solid border-neutral-200 bg-neutral-50 dark:border-neutral-950 dark:bg-neutral-900 '>
 
             <TopBar onMenuClick={() => setMenuOpen({state: !menuOpen.state})}/>
 
             <div className={`flex flex-col grow mx-1 mb-1 relative`}>
 
                 <div
-                    className={`rounded-sm bg-neutral-100 text-neutral-800 text-sm overflow-hidden duration-200 ease-in-out absolute z-50 w-full left-0 ${menuOpen.state ? "h-full" : "h-0"}`}>
+                    className={`rounded-sm bg-neutral-50 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-100 text-sm overflow-scroll duration-200 ease-in-out absolute z-50 w-full left-0  ${menuOpen.state ? "h-full" : "h-0"}`}>
                     <div className="p-1">
-                        <p className="text-md underline">Preferences</p>
+                        <div className="flex justify-between items-center my-2">
+                            <h1 className="font-bold text-lg  text-center">Settings</h1>
+                            <ThemeToggler/>
+                        </div>
 
-                        <div className="py-4">
-                            <div className="flex justify-between items-center">
-                                <p>Musics Directories :</p>
-                                <div className="text-xs underline cursor-pointer flex gap-4 text-neutral-400">
+                        <div className="p-2 border border-solid border-neutral-200 rounded my-2 dark:border-neutral-700">
+                            <p className="font-bold">Shortcuts</p>
+                            <div className="flex flex-col my-2 gap-2">
+                                <Shortcut keystroke={"space"} action={"Pause / Play"}/>
+                                <Shortcut keystroke={"n"} action={"Next"}/>
+                                <Shortcut keystroke={"p"} action={"Previous"}/>
+                                <Shortcut keystroke={"s"} action={"Shuffle"}/>
+                                <Shortcut keystroke={"o"} action={"Order"}/>
+                                <Shortcut keystroke={"/"} action={"Search Mode"}/>
+                                <Shortcut keystroke={"Esc"} action={"Close Search mode"}/>
+                                <Shortcut keystroke={"+"} action={"Volume up"}/>
+                                <Shortcut keystroke={"-"} action={"Volume down"}/>
+                            </div>
+                        </div>
+
+                        <div className="p-2 border border-solid border-neutral-200 rounded dark:border-neutral-700">
+                            <div className="flex justify-between items-center ">
+                                <p className="font-bold">Musics Directories</p>
+                                <div className="text-xs underline cursor-pointer flex gap-2 text-neutral-400">
                                     <p onClick={() => {
                                         addFolders().then();
                                     }}>
-                                        <FolderPlus size={18}/>
+                                        <FolderPlus size={16}/>
                                     </p>
 
                                     <p onClick={() => {
                                         scanMusic().then();
                                         setMenuOpen({state: false})
                                     }}>
-                                        <FolderSync size={18}/>
+                                        <FolderSync size={16}/>
                                     </p>
 
                                     <p onClick={() => {
                                         setMusicsFolders([])
                                     }}>
-                                        <FolderX size={18}/>
+                                        <FolderX size={16}/>
                                     </p>
                                 </div>
                             </div>
+
                             <div>
                                 <ul className="text-xs list-disc list-inside py-2">
                                     {
-                                        musicsFolders.map((el, index) => <li key={index}>{el}</li>)
+                                        musicsFolders.map((el, index) => <li className="marker:mr-0" key={index}>{el}</li>)
                                     }
                                 </ul>
                             </div>
@@ -271,7 +289,7 @@ function App() {
                 </div>
 
                 <div className={`overflow-hidden duration-200 ${searchMode.state ? "h-[38px]" : "h-0"}`}>
-                    <div className="h-max border rounded-sm border-neutral-300 border-solid mb-2">
+                    <div className="h-max border rounded-sm border-neutral-200 border-solid mb-2">
                         <input
                             onKeyDown={(event)=>{
 
@@ -350,5 +368,18 @@ function App() {
         </div>
     )
 }
+
+
+const Shortcut = ({ action , keystroke} : {keystroke : string , action : string}) => {
+    return (
+        <div className="flex justify-between">
+            <div className="text-xs">
+                {action}
+            </div>
+            <div className="w-max h-min p-1 py-[1px] text-xs font-mono font-bold border border-solid border-neutral-300 dark:border-neutral-700 rounded-md text-neutral-900 dark:text-neutral-100">{keystroke}</div>
+        </div>
+    );
+};
+
 
 export default App
