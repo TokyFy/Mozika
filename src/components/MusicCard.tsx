@@ -6,7 +6,7 @@ type IMusicCard = IMetadata & { isPlaying: boolean, isPaused?: boolean, albumArt
 function MusicCard({title, artist, album, picture, file, isPlaying, isPaused, albumArts = true}: IMusicCard) {
     return <>
         <div
-            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm hover:bg-neutral-200 ${isPlaying ? "bg-neutral-200" : ""}`}>
+            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm hover:bg-neutral-200 ${isPlaying ? "bg-indigo-100" : ""}`}>
 
             {
                 albumArts && <div>
