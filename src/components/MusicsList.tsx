@@ -47,7 +47,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
                                             isPaused={isPaused}
-                                            albumArts={true}
+                                            albumArts={index === currentMusicIndex}
                                             playerRef={playerRef}
                                             index={index}
                                         />

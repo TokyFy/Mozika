@@ -6,27 +6,25 @@ import sharp from "sharp";
 import {APP_DATA_DIR} from "./Contant";
 
 async function audioList(dir: string, callback: (musics: IMetadata | undefined) => void) {
-    const files = fs.readdirSync(dir);
-    for (const file of files) {
-        try {
+    try {
+        const files = await fs.promises.readdir(dir);
 
+        for (const file of files) {
             const filePath = path.join(dir, file);
-
-            const fileStat = fs.statSync(filePath);
+            const fileStat = await fs.promises.stat(filePath);
 
             if (fileStat.isDirectory()) {
-                await audioList(filePath, callback)
+                await audioList(filePath, callback);
             }
 
-            if (file.endsWith(".flac") || file.endsWith(".mp3")  || file.endsWith(".mp4")) {
-                fileStat.size <= 2000 * 1000 * 1000 &&
-                callback(await metadata(filePath));
+            if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".mp4")) {
+                if (fileStat.size <= 2000 * 1000 * 1000) {
+                    callback(await metadata(filePath));
+                }
             }
-
-        } catch (err) {
-            // Do things Here
         }
-
+    } catch (err) {
+        // Handle errors
     }
 }
 

@@ -16,6 +16,30 @@
     -webkit-app-region: drag;
 }
 
+@font-face {
+    font-family: "favorit Pro";
+    font-weight: 300;
+    src: url("/Favorit Pro/FavoritPro-SemiLight.otf");
+}
+
+@font-face {
+    font-family: "favorit Pro";
+    font-weight: 400;
+    src: url("/Favorit Pro/FavoritPro-Regular.otf");
+}
+
+@font-face {
+    font-family: "favorit Pro";
+    font-weight: 500;
+    src: url("/Favorit Pro/FavoritPro-Medium.otf");
+}
+
+@font-face {
+    font-family: "favorit Pro";
+    font-weight: 700;
+    src: url("/Favorit Pro/FavoritPro-Bold.otf");
+}
+
 
 body,
 input {
