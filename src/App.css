@@ -1,52 +1,20 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo-box {
-  position: relative;
-  height: 9em;
+#topbar {
+  -webkit-app-region: drag;
 }
 
-.logo {
-  position: absolute;
-  left: calc(50% - 4.5em);
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+#topbar #close {
+  -webkit-app-region: no-drag;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+body {
+  font-family: "favorit Pro", sans-serif;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .logo.electron {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
