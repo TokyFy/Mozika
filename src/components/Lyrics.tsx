@@ -71,7 +71,7 @@ function Lyrics({open, currentMusics}: ILyrics) {
     return (
         <div
             className={`w-full bg-neutral-50 dark:bg-neutral-950 dark:text-neutral-50 absolute bottom-0 left-0 z-[99] text-sm items-center justify-center text-center duration-100 ease-in-out overflow-hidden ${open ? "h-full" : "h-0"}`}>
-            <div className="h-full py-4 overflow-scroll px-8">
+            <div className="h-full py-4 overflow-scroll px-8 italic">
                 {
                     lyrics
                         ? lyrics.split("\n")
