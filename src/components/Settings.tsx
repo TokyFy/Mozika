@@ -47,12 +47,15 @@ function Settings({scanMusic , menuOpen , toggleMenu} : ISettings) {
                         <Shortcut keystroke={"n"} action={"Next"}/>
                         <Shortcut keystroke={"p"} action={"Previous"}/>
                         <Shortcut keystroke={"s"} action={"Shuffle"}/>
+                        <Shortcut keystroke={"c"} action={"Go to Current songs"}/>
                         <Shortcut keystroke={"o"} action={"Order"}/>
                         <Shortcut keystroke={"/"} action={"Search Mode"}/>
                         <Shortcut keystroke={"Esc"} action={"Close Search mode"}/>
                         <Shortcut keystroke={"+"} action={"Volume up"}/>
                         <Shortcut keystroke={"-"} action={"Volume down"}/>
                         <Shortcut keystroke={"l"} action={"Lyrics Mode"}/>
+                        <Shortcut keystroke={"m"} action={"Minimal Mode"}/>
+
                     </div>
                 </div>
 
