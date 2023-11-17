@@ -12,19 +12,25 @@
     }
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "export G_SLICE=always-malloc evolution && vite",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "pree2e": "vite build --mode=test",
     "e2e": "playwright test"
   },
   "dependencies": {
-    "electron-updater": "^6.1.1"
+    "electron-updater": "^6.1.1",
+    "lucide-react": "^0.292.0",
+    "music-metadata": "^7.13.5",
+    "react-virtualized-auto-sizer": "^1.0.20",
+    "react-window": "^1.8.9",
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "@playwright/test": "^1.37.1",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
+    "@types/react-window": "^1.8.7",
     "@vitejs/plugin-react": "^4.0.4",
     "autoprefixer": "^10.4.16",
     "electron": "^26.0.0",
