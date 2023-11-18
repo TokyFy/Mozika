@@ -4,12 +4,9 @@ import * as mm from 'music-metadata';
 import {createHash} from "node:crypto";
 import sharp from "sharp";
 
-const musicDir = "/home/toni/Music";
-
 async function audioList(dir: string, callback: (musics: IMetadata | undefined) => void) {
     const files = fs.readdirSync(dir);
     for (const file of files) {
-
         try {
             const filePath = path.join(dir, file);
 
@@ -17,13 +14,12 @@ async function audioList(dir: string, callback: (musics: IMetadata | undefined) 
                 await audioList(filePath, callback)
             }
 
-            if (file.endsWith(".mp3")) {
+            if (file.endsWith(".flac") || file.endsWith(".mp3")  || file.endsWith(".mp4")) {
                 callback(await metadata(filePath));
             }
         } catch (err) {
             // Do things Here
         }
-
     }
 }
 
