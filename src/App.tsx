@@ -15,12 +15,12 @@ function App() {
     const [currentMusic, setCurrentMusic] = useState(0);
 
     // Hold the key code of the Key event
-    const [keyPressed, setKeyPressed] = useState("")
+    const [keyPressed, setKeyPressed] = useState<{code : string}>()
 
     // For loading purpose
     const [songsCount, setSongsCount] = useState(0)
 
-    const [volume, setVolume] = useState(.75)
+    const [volume, setVolume] = useState(1)
 
     // The Audio element reference (For play/pause/volume controls)
     const player = useRef<HTMLAudioElement>(null);
@@ -60,25 +60,25 @@ function App() {
 
     const volumeAdd = () => {
         console.log(volume)
-        volume + 0.1 <= 1 ? setVolume(volume + 0.1) : setVolume(1)
+        volume + 0.1 <= 1 ? setVolume(Number((volume + 0.1).toFixed(2))) : setVolume(1)
     }
 
     const volumeMinus = () => {
         console.log(volume)
-        volume - 0.1 >= 0 ? setVolume(volume - 0.1) : setVolume(0)
+        volume - 0.1 >= 0 ? setVolume(Number((volume - 0.1).toFixed(2))) : setVolume(0)
     }
 
 
     useEffect(() => {
         if (musics.length) {
             document.addEventListener("keydown", event => {
-                setKeyPressed(event.code)
+                setKeyPressed({code : event.code})
             })
         }
     }, [musics]);
 
     useEffect(() => {
-        switch (keyPressed) {
+        switch (keyPressed?.code) {
             case "KeyN" :
                 next();
                 break;
@@ -103,8 +103,6 @@ function App() {
                 setIsPaused(!isPaused)
                 break;
         }
-
-        setKeyPressed("")
     }, [keyPressed]);
 
     useEffect(() => {

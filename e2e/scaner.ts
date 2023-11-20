@@ -1,4 +1,4 @@
-// import fs from "node:fs";
+import fs from "node:fs";
 // import * as mm from "music-metadata";
 // import path from "node:path";
 // import {createHash} from 'node:crypto';
@@ -6,11 +6,13 @@
 import os from "node:os";
 import path from "node:path";
 
-// const buffer = fs.readFileSync("/home/toni/Documents/Toky/Mozika/e2e/Cehryl.mp3")
-//
-// const metadata = await mm.parseBuffer(buffer);
+import * as mm from "music-metadata"
 
-// console.log(metadata.common!.picture![0].data)
+const buffer = fs.readFileSync("/home/toni/Downloads/video.mp4")
+//
+const metadata = await mm.parseBuffer(buffer);
+
+console.log(metadata.format.duration)
 
 
 // const OsDataDir = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share");
@@ -42,5 +44,3 @@ import path from "node:path";
 //
 // console.log(createImageHash("/home/image"))
 // console.log(createImageHash("/home/image"))
-
-console.log(path.basename("foo/bar.mp3"))

@@ -10,13 +10,17 @@ async function audioList(dir: string, callback: (musics: IMetadata | undefined) 
         try {
             const filePath = path.join(dir, file);
 
-            if (fs.statSync(filePath).isDirectory()) {
+            const fileStat = fs.statSync(filePath);
+
+            if (fileStat.isDirectory()) {
                 await audioList(filePath, callback)
             }
 
             if (file.endsWith(".flac") || file.endsWith(".mp3")  || file.endsWith(".mp4")) {
+                fileStat.size <= 200 * 1000 * 1000 &&
                 callback(await metadata(filePath));
             }
+
         } catch (err) {
             // Do things Here
         }
@@ -43,9 +47,13 @@ async function metadata(songPath: string): Promise<IMetadata | undefined> {
             picture = await cacheImage(metadata.common!.picture[0].data, `${createImageHash(songPath)}.jpg`)
         }
 
+        if(Number(metadata.format!.duration) >= 7 * 60) return
+
+        let fallbackSongsName = path.basename(songPath).replace(".mp4" , "").split("-").reverse()
+
         return {
-            title: metadata.common.title || path.basename(songPath),
-            artist: metadata.common.artist || "Unknown",
+            title: metadata.common.title || fallbackSongsName[0] || "",
+            artist: metadata.common.artist || fallbackSongsName[1] || "unknown",
             album: metadata.common.album || "",
             picture: picture,
             file: songPath

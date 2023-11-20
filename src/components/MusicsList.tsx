@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React  from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 import {FixedSizeList as List} from "react-window";
 import MusicCard from "@/components/MusicCard";
@@ -24,7 +24,7 @@ function MusicsList({musics , currentMusicIndex , onItemsClick , isPaused} : IMu
                             itemCount={musics?.length}
                             itemSize={56}
                             width={width}
-                            overscanCount={20}
+                            overscanCount={10}
                         >
                             {
                                 ({index, style}) => (
