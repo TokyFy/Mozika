@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react'
 import './App.css'
-import {ipcRenderer, dialog} from "electron";
+import {ipcRenderer} from "electron";
 import {IMetadata} from "../electron/main/music";
 import Topbar from "@/components/Topbar";
 import MusicsList from "@/components/MusicsList";
@@ -32,13 +32,18 @@ function App() {
         setSongsCount(songsCount + 1)
     })
 
-    async function loadMusic() {
+    async function loadMusics() {
+        return await ipcRenderer.invoke("load-musics") as IMetadata[];
+    }
+
+    async function scanMusic() {
+        setMusics([])
         const folder = await ipcRenderer.invoke("select-folder");
 
         if (folder) {
             setOnScanningMusics(true)
 
-            const musics = await ipcRenderer.invoke("load-musics", {
+            const musics = await ipcRenderer.invoke("scan-musics", {
                 folder: folder[0]
             }) as IMetadata[]
 
@@ -48,6 +53,8 @@ function App() {
         }
 
     }
+
+
 
     const next = () => {
         setCurrentMusic((currentMusic + 1) % musics.length)
@@ -59,15 +66,20 @@ function App() {
     }
 
     const volumeAdd = () => {
-        console.log(volume)
         volume + 0.1 <= 1 ? setVolume(Number((volume + 0.1).toFixed(2))) : setVolume(1)
     }
 
     const volumeMinus = () => {
-        console.log(volume)
         volume - 0.1 >= 0 ? setVolume(Number((volume - 0.1).toFixed(2))) : setVolume(0)
     }
 
+    useEffect(() => {
+        (async ()=>{
+            const musics = await loadMusics();
+            setMusics(musics)
+        })()
+
+    }, []);
 
     useEffect(() => {
         if (musics.length) {
@@ -88,7 +100,7 @@ function App() {
                 break;
 
             case "KeyL" :
-                loadMusic().then()
+                scanMusic().then()
                 break;
 
             case "NumpadAdd" :
@@ -148,12 +160,10 @@ function App() {
                             <>
                                 <p
                                     className="text-xs font-mono font-bold text-neutral-400 cursor-pointer"
-                                    onClick={() => loadMusic()}
                                 >
                                     {onScanningMusics ? `Loading... [${songsCount} songs]` : "Add songs ..."}
                                 </p>
                             </>
-
                     }
                 </div>
             </div>

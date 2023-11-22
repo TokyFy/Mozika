@@ -17,8 +17,7 @@ export default {
                 }
             },
             animation: {
-                "spin": "spin 2.5s linear infinite",
-
+                "spin": "spin 5s linear infinite forwards",
             },
         },
     },

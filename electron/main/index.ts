@@ -3,6 +3,7 @@ import {release} from 'node:os'
 import {join} from 'node:path'
 import {update} from './update'
 import {audioList, IMetadata} from "./music";
+import fs from "node:fs"
 
 const {protocol, net} = require('electron');
 
@@ -167,7 +168,7 @@ ipcMain.handle('quit', () => {
     app.quit()
 })
 
-ipcMain.handle('load-musics', async (_event , args) => {
+ipcMain.handle('scan-musics', async (_event , args) => {
 
     const musics:IMetadata[] = [];
 
@@ -180,10 +181,19 @@ ipcMain.handle('load-musics', async (_event , args) => {
         }
     })
 
+    fs.writeFileSync("./db.json" , JSON.stringify(musics))
 
     return musics;
 
 })
+
+
+ipcMain.handle('load-musics', async (_event , args) => {
+
+    return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
+
+})
+
 
 ipcMain.handle('select-folder',  () => {
     return dialog.showOpenDialogSync(

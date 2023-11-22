@@ -22,14 +22,16 @@ function MusicsList({musics , currentMusicIndex , onItemsClick , isPaused} : IMu
                         <List
                             height={height}
                             itemCount={musics?.length}
-                            itemSize={56}
+                            itemSize={52}
                             width={width}
                             overscanCount={10}
                         >
                             {
                                 ({index, style}) => (
                                     <div style={style} key={index}
-                                         onClick={() => onItemsClick(index)}>
+                                         onClick={() => onItemsClick(index)}
+                                         className={`flex ${index %2 === 0 ? "bg-neutral-100": ""}`}
+                                    >
                                         <MusicCard
                                             key={"items" + index} title={musics[index].title}
                                             artist={musics[index].artist}
@@ -38,6 +40,7 @@ function MusicsList({musics , currentMusicIndex , onItemsClick , isPaused} : IMu
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
                                             isPaused={isPaused}
+                                            albumArts={index === currentMusicIndex}
                                         />
                                     </div>
                                 )
