@@ -172,14 +172,18 @@ ipcMain.handle('scan-musics', async (_event , args) => {
 
     const musics:IMetadata[] = [];
 
-    console.log("Load starts")
+    const musicsFolders = args.folders as string[]
 
-    await audioList(args.folder , (music)=>{
-        if (music) {
-            win?.webContents.send("song-added")
-            musics.push(music);
-        }
-    })
+    console.log(musicsFolders)
+
+    for (let folder of musicsFolders ){
+        await audioList(folder, (music)=>{
+            if (music) {
+                win?.webContents.send("song-added")
+                musics.push(music);
+            }
+        })
+    }
 
     fs.writeFileSync("./db.json" , JSON.stringify(musics))
 
@@ -190,8 +194,9 @@ ipcMain.handle('scan-musics', async (_event , args) => {
 
 ipcMain.handle('load-musics', async (_event , args) => {
 
-    return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
+    if(fs.existsSync("./db.json")) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
 
+    return []
 })
 
 
