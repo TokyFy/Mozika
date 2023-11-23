@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 import {IMetadata} from "../electron/main/music";
 import TopBar from "@/components/Topbar";
 import MusicsList from "@/components/MusicsList";
-import {FolderClosed, FolderDown, FolderPlus, FolderSync, FolderX} from "lucide-react";
+import {FolderPlus, FolderSync, FolderX} from "lucide-react";
 
 
 type IAppData = {
@@ -206,7 +206,7 @@ function App() {
                         <div className="py-4">
                             <div className="flex justify-between items-center">
                                 <p>Musics Directories :</p>
-                                <div className="text-xs underline cursor-pointer flex gap-4">
+                                <div className="text-xs underline cursor-pointer flex gap-4 text-neutral-400">
                                     <p onClick={() => {
                                         addFolders().then();
                                     }}>
