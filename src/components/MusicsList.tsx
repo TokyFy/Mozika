@@ -15,7 +15,7 @@ type IMusicsList = {
 function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}: IMusicsList) {
 
     return (
-        <div className="w-full min-h-full my-8 pt-1">
+        <div className="w-full min-h-full">
             {
 
                 <AutoSizer>
