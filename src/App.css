@@ -1,26 +1,39 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 #topbar {
-  -webkit-app-region: drag;
+    -webkit-app-region: drag;
 }
 
 #topbar #close {
-  -webkit-app-region: no-drag;
+    -webkit-app-region: no-drag;
 }
 
 
 body,
 input {
-  font-family: "favorit Pro", sans-serif;
-  overflow: hidden;
+    font-family: "favorit Pro", sans-serif;
+    overflow: hidden;
 }
 
 input::selection {
-  background-color: black;
-  color: white;
+    background-color: black;
+    color: white;
 }
 
+#main-frame {
+  /*background-color: rgb(255, 255, 255);*/
+    /*background:*/
+    /*        linear-gradient(127deg, rgb(89, 57, 241 , 0.2), rgba(91, 131, 125, 0) 70.71%),*/
+    /*        linear-gradient(217deg, rgba(255, 255, 255, 0.2), rgba(89, 57, 241, 0) 70.71%),*/
+    /*        linear-gradient(336deg, rgba(255, 255, 255, 0.2), rgba(243, 65, 65, 0) 70.71%) white;*/
+}
+
+/*#main-frame {*/
+/*    background: linear-gradient(127deg, alpha(#835b5b, .55), alpha(#9b1a1a, 0) 70.71%),*/
+/*    linear-gradient(217deg, alpha(#fff, .55), alpha(#fff, 0) 70.71%),*/
+/*    linear-gradient(336deg, alpha(#fff, .55), alpha(#fff, 0) 70.71%);*/
+/*}*/

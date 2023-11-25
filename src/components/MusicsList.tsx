@@ -15,7 +15,7 @@ type IMusicsList = {
 function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}: IMusicsList) {
 
     return (
-        <div className="w-full min-h-full my-8">
+        <div className="w-full min-h-full my-8 pt-1">
             {
 
                 <AutoSizer>
@@ -33,7 +33,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}
                                 ({index, style, isScrolling}) => (
                                     <div style={style} key={index}
                                          onClick={() => onItemsClick(index)}
-                                         className={`flex ${index % 2 === 0 ? "bg-neutral-100" : ""}`}
+                                         className={`flex ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800 dark:bg-opacity-25" : ""}`}
                                     >
                                         <MusicCard
                                             key={"items" + index} title={musics[index].title}
@@ -43,7 +43,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
                                             isPaused={isPaused}
-                                            albumArts={index === currentMusicIndex}
+                                            albumArts={true}
                                         />
                                     </div>
                                 )
