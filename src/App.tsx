@@ -192,7 +192,7 @@ function App() {
                 />
 
                 <div
-                    className={`grow flex justify-center items-center rounded-[4px] overflow-hidden duration-300`}>
+                    className={`grow flex justify-center items-center overflow-hidden duration-300`}>
                     {
                         Boolean(appData.musics.length) ?
                             <>

@@ -37,14 +37,14 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
                         ...appData,
                         musics: [...fuse.search(dQuery).map(el => el.item), appData.musics[appData.currentMusic]],
                         currentMusic: 0,
-                        isPaused: true
+                        isPaused: false
                     })
                 : setAppData(
                     {
                         ...appData,
                         musics: await loadMusics(),
                         currentMusic: 0,
-                        isPaused: true
+                        isPaused: false
                     })
         })()
     }, [dQuery]);
