@@ -9,10 +9,11 @@ type IMusicsList = {
     onItemsClick: (index: number) => void,
     currentMusicIndex: number
     isPaused?: boolean,
-    listRef?: React.Ref<any>
+    listRef?: React.Ref<any>,
+    playerRef : React.RefObject<HTMLAudioElement>
 }
 
-function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}: IMusicsList) {
+function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef , playerRef}: IMusicsList) {
 
     return (
         <div className="w-full min-h-full">
@@ -25,7 +26,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}
                             itemCount={musics?.length}
                             itemSize={52}
                             width={width}
-                            overscanCount={20}
+                            overscanCount={5}
                             ref={listRef}
                             useIsScrolling={true}
                         >
@@ -43,7 +44,8 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef}
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
                                             isPaused={isPaused}
-                                            albumArts={true}
+                                            albumArts={index === currentMusicIndex}
+                                            playerRef={playerRef}
                                         />
                                     </div>
                                 )

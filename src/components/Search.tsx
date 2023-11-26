@@ -11,9 +11,10 @@ type ISearch = {
     setAppData : (data : IAppData) => void,
     appData : IAppData,
     loadMusics : () => Promise<IMetadata[]>
+    minimalMode ?: boolean
 }
 
-function Search({setSearchMode , searchMode , setAppData , appData , loadMusics} : ISearch) {
+function Search({setSearchMode , searchMode , setAppData , appData , loadMusics , minimalMode} : ISearch) {
 
     const [query, setQuery] = useState('');
     const [dQuery] = useDebounce(query, 500);
@@ -51,10 +52,12 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics}
     mousetrap.bind('/', (event) => {
         event.preventDefault();
 
-        setSearchMode({state: true})
+        if(!minimalMode) {
+            setSearchMode({state: true})
 
-        if (searchInputRef.current) {
-            searchInputRef.current?.focus();
+            if (searchInputRef.current) {
+                searchInputRef.current?.focus();
+            }
         }
     });
 
@@ -64,8 +67,8 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics}
 
     return (
         <div
-            className={`overflow-hidden duration-200 rounded-sm bg-white dark:bg-neutral-700 ${searchMode ? "h-[34px]" : "h-0"}`}>
-            <div className="h-full border border-neutral-200 border-solid">
+            className={`overflow-hidden duration-200 rounded-sm bg-white dark:bg-neutral-800 ${searchMode ? "h-[34px]" : "h-0"}`}>
+            <div className="h-full border border-neutral-200 border-solid dark:border-neutral-600">
                 <input
                     onKeyDown={(event) => {
 
@@ -99,7 +102,7 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics}
                     onChange={(e) => {
                         setQuery(e.target.value);
                     }}
-                    className={`w-full px-2 h-full focus:outline-0 focus-visible:outline-0 border-transparent outline-0 placeholder:text-neutral-400 bg-transparent`}
+                    className={`w-full px-2 h-full focus:outline-0 focus-visible:outline-0 border-transparent outline-0 dark:text-neutral-100 dark:placeholder:text-neutral-300 placeholder:text-neutral-400 bg-transparent`}
                     type="text"
                 />
             </div>

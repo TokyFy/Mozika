@@ -8,6 +8,8 @@ import mousetrap from "mousetrap";
 import Settings from "@/components/Settings";
 import {IAppData} from "@/type/globalState";
 import Search from "@/components/Search";
+import {Radio} from "lucide-react";
+import Minimal from "@/components/Minimal";
 
 function App() {
 
@@ -24,6 +26,9 @@ function App() {
     const [songsCount, setSongsCount] = useState(0)
     const [menuOpen, setMenuOpen] = useState({state: false});
     const [searchMode, setSearchMode] = useState({state: false});
+    const [minimalMode, setMinimalMode] = useState({state: false})
+
+
 
     // // The Audio element reference (For play/pause/volume controls)
     const player = useRef<HTMLAudioElement>(null);
@@ -38,6 +43,7 @@ function App() {
     async function loadMusics() {
         return await ipcRenderer.invoke("load-musics") as IMetadata[];
     }
+
     async function scanMusic(folders: string[]) {
         setAppData({...appData, musics: [], onScanningMusics: true, currentMusic: 0})
 
@@ -89,6 +95,7 @@ function App() {
 
 
     useEffect(() => {
+
         (async () => {
             const musics = await loadMusics();
             setAppData({...appData, musics})
@@ -97,11 +104,12 @@ function App() {
     }, []);
 
     useEffect(() => {
-        // setAppData({...appData , isPaused : false})
+        setAppData({...appData, isPaused: false})
         centerList();
     }, [appData.currentMusic]);
 
     useEffect(() => {
+        if (appData.musics.length === 0) setAppData({...appData, currentMusic: 0})
         setSongsCount(0)
     }, [appData.musics]);
 
@@ -142,12 +150,27 @@ function App() {
         }
         setAppData({...appData, isPaused: !appData.isPaused})
     });
+    mousetrap.bind('m', () => {
+
+        if (minimalMode.state) {
+            setMinimalMode({state: false});
+            ipcRenderer.invoke("normal-mode").then()
+        } else {
+            setMinimalMode({state: true});
+            ipcRenderer.invoke("minimal-mode").then()
+        }
+    })
 
 
     return (
         <div
             id="main-frame"
-            className='h-full text-neutral-900 flex flex-col overflow-hidden rounded-sm border-4 border-solid border-neutral-200 bg-neutral-50 gap-1 dark:border-neutral-700 dark:bg-neutral-900 '>
+            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-200 bg-neutral-50 gap-1 dark:border-neutral-700 dark:bg-neutral-900 ${minimalMode.state ? "border-2" : "border-4"}`}>
+
+            {
+                Boolean(appData.musics.length && minimalMode.state)
+                && <Minimal music={appData.musics[appData.currentMusic]} isPaused={appData.isPaused}/>
+            }
 
             <TopBar onMenuClick={() => setMenuOpen({state: !menuOpen.state})}/>
 
@@ -160,11 +183,12 @@ function App() {
                 />
 
                 <Search
-                    setSearchMode={(value)=>setSearchMode(value)}
-                    searchMode={searchMode.state}
+                    setSearchMode={(value) => setSearchMode(value)}
+                    searchMode={searchMode.state && !minimalMode.state}
                     setAppData={(data) => setAppData(data)}
                     appData={appData}
-                    loadMusics={()=>loadMusics()}
+                    loadMusics={() => loadMusics()}
+                    minimalMode={minimalMode.state}
                 />
 
                 <div
@@ -175,9 +199,12 @@ function App() {
                                 <MusicsList
                                     musics={appData.musics}
                                     currentMusicIndex={appData.currentMusic}
-                                    onItemsClick={index => {setAppData({...appData, currentMusic: index, isPaused: false})}}
+                                    onItemsClick={index => {
+                                        setAppData({...appData, currentMusic: index, isPaused: false})
+                                    }}
                                     isPaused={appData.isPaused}
                                     listRef={listRef}
+                                    playerRef={player}
                                 />
                                 <audio
                                     ref={player}
@@ -185,8 +212,8 @@ function App() {
                                     controls
                                     autoPlay={!appData.isPaused}
                                     onEnded={() => next()}
-                                    onPause={() =>  setAppData({...appData, isPaused: true})}
-                                    onPlay={() =>  setAppData({...appData, isPaused: false})}
+                                    onPause={() => setAppData({...appData, isPaused: true})}
+                                    onPlay={() => setAppData({...appData, isPaused: false})}
                                     src={`app:///${appData.musics[appData.currentMusic].file}`}>
                                 </audio>
                             </>
