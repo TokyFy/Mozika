@@ -1,9 +1,9 @@
 {
-  "name": "electron-vite-react",
-  "version": "2.2.0",
+  "name": "mozika",
+  "version": "1.0.0",
   "main": "dist-electron/main/index.js",
-  "description": "Electron Vite React boilerplate.",
-  "author": "草鞋没号 <308487730@qq.com>",
+  "description": "Yep another music player",
+  "author": "Toky Fy <tokyfydev@gmail.com>",
   "license": "MIT",
   "private": true,
   "debug": {
@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
+    "win:dev": "set G_SLICE=always-malloc evolution && vite",
     "unix:dev": "export G_SLICE=always-malloc evolution && vite",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@types/mousetrap": "^1.6.15",
+    "cross-env": "^7.0.3",
     "electron-updater": "^6.1.1",
     "fuse.js": "^7.0.0",
     "lucide-react": "^0.292.0",
