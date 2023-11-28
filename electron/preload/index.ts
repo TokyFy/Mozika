@@ -42,7 +42,7 @@ function useLoading() {
 }
 .${className} > div {
   animation-fill-mode: both;
-  color: white;
+  color: black;
   font-size: 14px;
   animation: square-spin 3s 0s cubic-bezier(0.09, 0.57, 0.49, 0.9) infinite;
   font-family: system-ui;
@@ -57,7 +57,7 @@ function useLoading() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #282c34;
+  background: rgb(250,250,250);
   z-index: 9;
 }
     `
@@ -67,7 +67,7 @@ function useLoading() {
     oStyle.id = 'app-loading-style'
     oStyle.innerHTML = styleContent
     oDiv.className = 'app-loading-wrap'
-    oDiv.innerHTML = `<div class="${className}"><div>Hello (~_~)</div></div>`
+    oDiv.innerHTML = `<div class="${className}"><div>~~~ Mozika ~~</div></div>`
 
     return {
         appendLoading() {
