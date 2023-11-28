@@ -61,9 +61,9 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
         }
     });
 
-    mousetrap.bind('esc', (_event) => {
-        setSearchMode({state: false})
-    });
+    // mousetrap.bind('esc', (_event) => {
+    //     setSearchMode({state: false})
+    // });
 
     return (
         <div

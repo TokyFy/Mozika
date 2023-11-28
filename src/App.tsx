@@ -9,6 +9,7 @@ import Settings from "@/components/Settings";
 import {IAppData} from "@/type/globalState";
 import Search from "@/components/Search";
 import Minimal from "@/components/Minimal";
+import Lyrics from "@/components/Lyrics";
 
 function App() {
 
@@ -25,7 +26,8 @@ function App() {
     const [songsCount, setSongsCount] = useState(0)
     const [menuOpen, setMenuOpen] = useState({state: false});
     const [searchMode, setSearchMode] = useState({state: false});
-    const [minimalMode, setMinimalMode] = useState({state: false})
+    const [minimalMode, setMinimalMode] = useState({state: false});
+    const [lyricsMode, setLyricsMode] = useState(false)
 
 
 
@@ -120,6 +122,11 @@ function App() {
         }
     }, [appData.volume, appData.isPaused]);
 
+    useEffect(() => {
+        setLyricsMode(false);
+        setSearchMode({state: false})
+    }, [minimalMode.state]);
+
     mousetrap.bind('n', next);
     mousetrap.bind('p', prev);
     mousetrap.bind('+', volumeAdd);
@@ -159,12 +166,19 @@ function App() {
             ipcRenderer.invoke("minimal-mode").then()
         }
     })
+    mousetrap.bind('l', ()=>{
+        setLyricsMode(!lyricsMode)
+    });
+    mousetrap.bind('esc', ()=>{
+        setLyricsMode(false);
+        setSearchMode({state: false})
+    });
 
 
     return (
         <div
             id="main-frame"
-            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-200 bg-neutral-50 gap-1 dark:border-neutral-950 dark:bg-neutral-950 ${minimalMode.state ? "border-2" : "border-4"}`}>
+            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-100 bg-neutral-50 gap-1 dark:border-neutral-950 dark:bg-neutral-950 ${minimalMode.state ? "border-2" : "border-4"}`}>
 
             {
                 Boolean(appData.musics.length && minimalMode.state)
@@ -183,7 +197,7 @@ function App() {
 
                 <Search
                     setSearchMode={(value) => setSearchMode(value)}
-                    searchMode={searchMode.state && !minimalMode.state}
+                    searchMode={searchMode.state && !minimalMode.state && !lyricsMode}
                     setAppData={(data) => setAppData(data)}
                     appData={appData}
                     loadMusics={() => loadMusics()}
@@ -191,7 +205,7 @@ function App() {
                 />
 
                 <div
-                    className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 ${searchMode.state ? "translate-y-9" : ""}`}>
+                    className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 relative ${searchMode.state ? "translate-y-9" : ""}`}>
                     {
                         Boolean(appData.musics.length) ?
                             <>
@@ -215,6 +229,7 @@ function App() {
                                     onPlay={() => setAppData({...appData, isPaused: false})}
                                     src={`app:///${appData.musics[appData.currentMusic].file}`}>
                                 </audio>
+
                             </>
                             :
                             <p
@@ -223,6 +238,10 @@ function App() {
                             </p>
                     }
                 </div>
+
+                {
+                    Boolean(appData.musics.length) && <Lyrics open={lyricsMode && !minimalMode.state} currentMusics={appData.musics[appData.currentMusic]}/>
+                }
 
             </div>
         </div>
