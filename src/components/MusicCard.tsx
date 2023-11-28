@@ -71,7 +71,7 @@ function MusicCard({
 
             {
                 albumArts &&  <div
-                    className={`aspect-square w-9 z-50 rounded-sm flex justify-center items-center overflow-hidden text-neutral-400  group-hover/mc:bg-neutral-100 dark:group-hover/mc:bg-neutral-300 duration-500 ${isPlaying ? "bg-neutral-50" : "bg-neutral-200 dark:bg-neutral-700"}`}>
+                    className={`aspect-square w-9 z-50 flex justify-center items-center overflow-hidden text-neutral-400  group-hover/mc:bg-neutral-100 dark:group-hover/mc:bg-neutral-300 duration-500 ${isPlaying ? "bg-neutral-50" : "bg-neutral-200 dark:bg-neutral-700"}`}>
                     {picture
                         ? <img className="w-full h-auto z-50" src={`app:///${picture}`} alt={""}/>
                         : <div className="absolute flex justify-center items-center z-50 text-inherit">

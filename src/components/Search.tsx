@@ -6,7 +6,7 @@ import {IMetadata} from "../../electron/main/music";
 import {IAppData} from "@/type/globalState";
 
 type ISearch = {
-    setSearchMode : (value : {state : boolean}) => void,
+    setSearchMode : (value : boolean) => void,
     searchMode : boolean,
     setAppData : (data : IAppData) => void,
     appData : IAppData,
@@ -44,7 +44,7 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
                         ...appData,
                         musics: await loadMusics(),
                         currentMusic: 0,
-                        isPaused: false
+                        isPaused: true
                     })
         })()
     }, [dQuery]);
@@ -53,7 +53,7 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
         event.preventDefault();
 
         if(!minimalMode) {
-            setSearchMode({state: true})
+            setSearchMode(true)
 
             if (searchInputRef.current) {
                 searchInputRef.current?.focus();
@@ -74,13 +74,13 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
 
                         if (event.key === "Escape") {
                             event.preventDefault()
-                            setSearchMode({state: false});
+                            setSearchMode(false);
                             return;
                         }
 
                         if (event.key === "/") {
                             event.preventDefault()
-                            setSearchMode({state: true});
+                            setSearchMode(true);
                             return
                         }
 

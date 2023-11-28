@@ -24,9 +24,9 @@ function App() {
     const [appData, setAppData] = useState<IAppData>(states)
     // For loading purpose
     const [songsCount, setSongsCount] = useState(0)
-    const [menuOpen, setMenuOpen] = useState({state: false});
-    const [searchMode, setSearchMode] = useState({state: false});
-    const [minimalMode, setMinimalMode] = useState({state: false});
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [searchMode, setSearchMode] = useState(false);
+    const [minimalMode, setMinimalMode] = useState(false);
     const [lyricsMode, setLyricsMode] = useState(false)
 
 
@@ -124,8 +124,8 @@ function App() {
 
     useEffect(() => {
         setLyricsMode(false);
-        setSearchMode({state: false})
-    }, [minimalMode.state]);
+        setSearchMode(false)
+    }, [minimalMode]);
 
     mousetrap.bind('n', next);
     mousetrap.bind('p', prev);
@@ -158,11 +158,11 @@ function App() {
     });
     mousetrap.bind('m', () => {
 
-        if (minimalMode.state) {
-            setMinimalMode({state: false});
+        if (minimalMode) {
+            setMinimalMode(false);
             ipcRenderer.invoke("normal-mode").then()
         } else {
-            setMinimalMode({state: true});
+            setMinimalMode(true);
             ipcRenderer.invoke("minimal-mode").then()
         }
     })
@@ -171,41 +171,41 @@ function App() {
     });
     mousetrap.bind('esc', ()=>{
         setLyricsMode(false);
-        setSearchMode({state: false})
+        setSearchMode(false)
     });
 
 
     return (
         <div
             id="main-frame"
-            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-100 bg-neutral-50 gap-1 dark:border-neutral-950 dark:bg-neutral-950 ${minimalMode.state ? "border-2" : "border-4"}`}>
+            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-100 bg-neutral-50 gap-1 dark:border-neutral-950 dark:bg-neutral-950 ${minimalMode ? "border-2" : "border-4"}`}>
 
             {
-                Boolean(appData.musics.length && minimalMode.state)
+                Boolean(appData.musics.length && minimalMode)
                 && <Minimal music={appData.musics[appData.currentMusic]} isPaused={appData.isPaused}/>
             }
 
-            <TopBar onMenuClick={() => setMenuOpen({state: !menuOpen.state})}/>
+            <TopBar onMenuClick={() => setMenuOpen(!menuOpen)}/>
 
-            <div className={`flex flex-col grow mx-1 mb-1 relative ${searchMode.state ? "gap-1" : ""}`}>
+            <div className={`flex flex-col grow mx-1 mb-1 relative ${searchMode ? "gap-1" : ""}`}>
 
                 <Settings
                     scanMusic={scanMusic}
-                    menuOpen={menuOpen.state}
-                    toggleMenu={(state) => setMenuOpen({state})}
+                    menuOpen={menuOpen}
+                    toggleMenu={(state) => setMenuOpen(state)}
                 />
 
                 <Search
                     setSearchMode={(value) => setSearchMode(value)}
-                    searchMode={searchMode.state && !minimalMode.state && !lyricsMode}
+                    searchMode={searchMode && !minimalMode && !lyricsMode}
                     setAppData={(data) => setAppData(data)}
                     appData={appData}
                     loadMusics={() => loadMusics()}
-                    minimalMode={minimalMode.state}
+                    minimalMode={minimalMode}
                 />
 
                 <div
-                    className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 relative ${searchMode.state ? "translate-y-9" : ""}`}>
+                    className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 relative ${searchMode ? "translate-y-9" : ""}`}>
                     {
                         Boolean(appData.musics.length) ?
                             <>
@@ -240,7 +240,7 @@ function App() {
                 </div>
 
                 {
-                    Boolean(appData.musics.length) && <Lyrics open={lyricsMode && !minimalMode.state} currentMusics={appData.musics[appData.currentMusic]}/>
+                    Boolean(appData.musics.length) && <Lyrics open={lyricsMode && !minimalMode} currentMusics={appData.musics[appData.currentMusic]}/>
                 }
 
             </div>
