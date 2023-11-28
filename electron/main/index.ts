@@ -199,7 +199,7 @@ ipcMain.handle('scan-musics', async (_event, args) => {
 
 ipcMain.handle('load-musics', async (_event, args) => {
 
-    if (fs.existsSync(path.join(APP_DATA_DIR, "/db.json"))) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
+    if (fs.existsSync(path.join(APP_DATA_DIR, "/db.json"))) return JSON.parse(fs.readFileSync(path.join(APP_DATA_DIR, "/db.json")).toString()) as IMetadata[];
 
     return []
 })
