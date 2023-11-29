@@ -1,5 +1,5 @@
 import React from 'react';
-import {Citrus, Radio} from "lucide-react";
+import {Asterisk, Citrus, Radio} from "lucide-react";
 import {IMetadata} from "@electron/main/music";
 
 function Minimal({music , isPaused} : {music : IMetadata , isPaused ?: boolean}) {
@@ -21,7 +21,7 @@ function Minimal({music , isPaused} : {music : IMetadata , isPaused ?: boolean})
                     <p className="overflow-ellipsis whitespace-nowrap overflow-hidden text-xs text-neutral-400">{music.artist}</p>
                 </div>
                 <div className={`flex justify-center items-center dark:text-neutral-100 px-1 ${isPaused && "opacity-30"}`}>
-                    <Radio size={18}/>
+                    <Asterisk absoluteStrokeWidth size={24}/>
                 </div>
             </div>
         </div>

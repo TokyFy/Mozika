@@ -96,7 +96,6 @@ function App() {
             listRef.current.scrollToItem(appData.currentMusic, "auto");
         }
     }
-
     const enQueue = (index : number , padding : number) => {
         let musics = [...appData.musics];
         [musics[index] , musics[appData.currentMusic + padding]] =  [musics[appData.currentMusic + padding] , musics[index]];
