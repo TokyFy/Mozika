@@ -1,6 +1,6 @@
 import React from 'react';
-import {CassetteTape, Radio} from "lucide-react";
-import {IMetadata} from "../../electron/main/music";
+import {Citrus, Radio} from "lucide-react";
+import {IMetadata} from "@electron/main/music";
 
 function Minimal({music , isPaused} : {music : IMetadata , isPaused ?: boolean}) {
     return (
@@ -10,8 +10,8 @@ function Minimal({music , isPaused} : {music : IMetadata , isPaused ?: boolean})
             <div className="w-full aspect-square overflow-hidden">
                 {Boolean(music.picture !== "")
                     ? <img className="w-full h-auto" src={`app:///${music.picture}`} alt={""}/>
-                    : <div className="flex justify-center bg-neutral-50 items-center text-inherit w-full h-full dark:text-neutral-100 dark:bg-neutral-800">
-                        <CassetteTape absoluteStrokeWidth size={28}/>
+                    : <div className="flex justify-center bg-white items-center text-inherit w-full h-full dark:text-neutral-100 dark:bg-neutral-950">
+                        <Citrus absoluteStrokeWidth size={24}/>
                     </div>
                 }
             </div>
