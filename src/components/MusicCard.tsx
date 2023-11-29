@@ -7,6 +7,7 @@ type IMusicCard = IMetadata & {
     isPaused?: boolean,
     albumArts?: boolean,
     playerRef: React.RefObject<HTMLAudioElement>
+    index ?: number
 }
 
 function MusicCard({
@@ -18,7 +19,8 @@ function MusicCard({
                        isPlaying,
                        isPaused,
                        albumArts = true,
-                       playerRef
+                       playerRef,
+                        index
                    }: IMusicCard) {
 
     const getAudioCurrentTime = () => {
@@ -85,8 +87,10 @@ function MusicCard({
                 <p className={`overflow-ellipsis whitespace-nowrap text-xs overflow-hidden first-letter:uppercase  ${isPlaying ? "text-neutral-400" : "text-neutral-500 dark:text-neutral-500"}`}>{artist}</p>
             </div>
             <div
-                className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10 ${isPlaying ? "opacity-100" : "hidden"}`}>
-                <Radio className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={20}/>
+                className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10`}>
+                {isPlaying
+                    ? <Radio className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={20}/>
+                    : <p className="text-xs text-neutral-300 dark:text-neutral-600 font-mono">{index}</p>}
             </div>
 
             {
