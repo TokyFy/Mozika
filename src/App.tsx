@@ -96,11 +96,11 @@ function App() {
             listRef.current.scrollToItem(appData.currentMusic, "auto");
         }
     }
-    const enQueue = (index : number , padding : number) => {
+    const enQueue = (index: number, padding: number) => {
         let musics = [...appData.musics];
-        [musics[index] , musics[appData.currentMusic + padding]] =  [musics[appData.currentMusic + padding] , musics[index]];
+        [musics[index], musics[appData.currentMusic + padding]] = [musics[appData.currentMusic + padding], musics[index]];
 
-        setAppData({...appData , musics : musics})
+        setAppData({...appData, musics: musics})
     }
 
 
@@ -163,7 +163,7 @@ function App() {
                 ...appData,
                 musics: [...appData.musics.sort(
                     (a, b) => {
-                        return a.title < b.title ? -1 : 1
+                        return a.artist < b.artist ? -1 : 1
                     }
                 )
                 ]
@@ -229,23 +229,28 @@ function App() {
                     minimalMode={minimalMode}
                 />
 
+
                 <div
                     className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 relative ${searchMode ? "translate-y-9" : ""}`}>
                     {
                         Boolean(appData.musics.length) ?
                             <>
-                                <MusicsList
-                                    musics={appData.musics}
-                                    currentMusicIndex={appData.currentMusic}
-                                    onItemsClick={index => {
-                                        setAppData({...appData, currentMusic: index, isPaused: false})
-                                    }}
-                                    isPaused={appData.isPaused}
-                                    listRef={listRef}
-                                    playerRef={player}
-                                    marker={searchMode ? searchResultIndex : -1}
-                                    onContextMenu={index => {enQueue(index , 1)}}
-                                />
+                                {
+                                    !minimalMode &&
+                                    <MusicsList
+                                        musics={appData.musics}
+                                        currentMusicIndex={appData.currentMusic}
+                                        onItemsClick={index => {
+                                            setAppData({...appData, currentMusic: index, isPaused: false})
+                                        }}
+                                        isPaused={appData.isPaused}
+                                        listRef={listRef}
+                                        playerRef={player}
+                                        marker={searchMode ? searchResultIndex : -1}
+                                        onContextMenu={index => {
+                                            enQueue(index, 1)
+                                        }}
+                                    />}
                                 <audio
                                     ref={player}
                                     className="hidden"
@@ -265,6 +270,7 @@ function App() {
                             </p>
                     }
                 </div>
+
 
                 {
                     Boolean(appData.musics.length) &&

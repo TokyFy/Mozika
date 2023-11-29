@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ipcRenderer} from "electron";
-import {IMetadata} from "../../electron/main/music";
+import {IMetadata} from "@electron/main/music";
 
 type ILyrics = {
     open: boolean,

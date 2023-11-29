@@ -69,7 +69,7 @@ function MusicCard({
         <div
             // @ts-ignore
             ref={currentSongsRef}
-            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-1 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}>
+            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}>
 
             {
                 albumArts &&  <div
@@ -82,7 +82,7 @@ function MusicCard({
                     }
                 </div>
             }
-            <div className="overflow-ellipsis max-w-[75%] z-10">
+            <div className="overflow-ellipsis max-w-[70%] z-10">
                 <p className={`overflow-ellipsis  whitespace-nowrap text-sm overflow-hidden first-letter:uppercase ${isPlaying ? "text-neutral-800 dark:text-neutral-100" : "text-neutral-800 dark:text-neutral-100"}`}>{title}</p>
                 <p className={`overflow-ellipsis whitespace-nowrap text-xs overflow-hidden first-letter:uppercase  ${isPlaying ? "text-neutral-400" : "text-neutral-500 dark:text-neutral-500"}`}>{artist}</p>
             </div>
@@ -90,7 +90,7 @@ function MusicCard({
                 className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10`}>
                 {isPlaying
                     ? <Asterisk className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={18}/>
-                    : <p className="text-xs text-neutral-300 dark:text-neutral-600 font-mono">{index}</p>}
+                    : <p className="text-xs text-neutral-300 dark:text-neutral-800 font-mono font-bold">{index}</p>}
             </div>
 
             {

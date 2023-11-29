@@ -27,14 +27,15 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
         (async () => {
             if (!fuse) {
                 fuse = new Fuse(appData.musics, {
-                    keys: ['title', 'artist', 'album'],
-                    threshold: .5,
+                    keys: ['file' , "title" , "artist"],
+                    threshold: .6,
                 });
             }
 
             if (dQuery.trim() !== "") {
-                const result = fuse.search(dQuery, {limit: 1})
-                setResult(result[0].refIndex || -1)
+                const result = fuse.search(dQuery, {limit: 1});
+
+                result.length === 1 && setResult(result[0].refIndex || -1);
             } else {
                 setResult(appData.currentMusic)
             }

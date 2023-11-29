@@ -1,16 +1,16 @@
 import React from 'react';
-import {Asterisk, Citrus, Radio} from "lucide-react";
+import {Asterisk, Citrus} from "lucide-react";
 import {IMetadata} from "@electron/main/music";
 
 function Minimal({music , isPaused} : {music : IMetadata , isPaused ?: boolean}) {
     return (
         <div
             id={"dragable"}
-            className="h-full w-full absolute flex flex-col bg-neutral-100 z-50 cursor-pointer p-1 dark:bg-neutral-900">
+            className="h-full w-full absolute flex flex-col bg-neutral-100 z-50 cursor-pointer p-1 dark:bg-neutral-950">
             <div className="w-full aspect-square overflow-hidden">
                 {Boolean(music.picture !== "")
                     ? <img className="w-full h-auto" src={`app:///${music.picture}`} alt={""}/>
-                    : <div className="flex justify-center bg-white items-center text-inherit w-full h-full dark:text-neutral-100 dark:bg-neutral-950">
+                    : <div className="flex justify-center bg-white items-center text-inherit w-full h-full dark:text-neutral-100 dark:bg-neutral-900">
                         <Citrus absoluteStrokeWidth size={24}/>
                     </div>
                 }
