@@ -1,4 +1,4 @@
-import {app, BrowserWindow, dialog, ipcMain, shell} from 'electron'
+import {app, BrowserWindow, dialog, ipcMain, shell , protocol , clipboard} from 'electron'
 import {release} from 'node:os'
 import path, {join} from 'node:path'
 import {update} from './update'
@@ -6,8 +6,6 @@ import {audioList, IMetadata} from "./music";
 import fs from "node:fs"
 import {APP_DATA_DIR} from "./Contant";
 import {lyricsFile} from "./utils";
-
-const {protocol, net} = require('electron');
 
 // The built directory structure
 //
@@ -238,4 +236,12 @@ ipcMain.handle("get-lyrics" , (event, args) => {
     if(fs.existsSync(lyricsPath)) {
         return  fs.readFileSync(lyricsPath).toString()
     }
+})
+
+ipcMain.handle("open-music-on-folder" , (event , args) => {
+    shell.showItemInFolder(args)
+})
+
+ipcMain.handle("copy-to-clipboard" , (event , args) => {
+    clipboard.writeText(args);
 })

@@ -193,6 +193,15 @@ function App() {
         setLyricsMode(false);
         setSearchMode(false)
     });
+    mousetrap.bind('f',  () => {
+        ipcRenderer.invoke("open-music-on-folder" , appData.musics[appData.currentMusic].file)
+    });
+    mousetrap.bind('ctrl+c' , ()=>{
+        const currentMusic = appData.musics[appData.currentMusic];
+
+        ipcRenderer.invoke("copy-to-clipboard" ,
+            `${currentMusic.artist} - ${currentMusic.title}`)
+    })
 
 
     return (
