@@ -90,7 +90,7 @@ function MusicCard({
                 className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10`}>
                 {isPlaying
                     ? <Asterisk className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={18}/>
-                    : <p className="text-xs text-neutral-300 dark:text-neutral-800 font-mono font-bold">{index}</p>}
+                    : <p className="text-xs text-neutral-300 dark:text-neutral-800 font-mono font-bold">{""}</p>}
             </div>
 
             {
