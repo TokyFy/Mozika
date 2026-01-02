@@ -13,8 +13,14 @@
 }
 
 
-body {
+body,
+input {
   font-family: "favorit Pro", sans-serif;
   overflow: hidden;
+}
+
+input::selection {
+  background-color: black;
+  color: white;
 }
 

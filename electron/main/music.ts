@@ -18,7 +18,7 @@ async function audioList(dir: string, callback: (musics: IMetadata | undefined) 
             }
 
             if (file.endsWith(".flac") || file.endsWith(".mp3")  || file.endsWith(".mp4")) {
-                fileStat.size <= 200 * 1000 * 1000 &&
+                fileStat.size <= 2000 * 1000 * 1000 &&
                 callback(await metadata(filePath));
             }
 
@@ -39,8 +39,10 @@ type IMetadata = {
 
 async function metadata(songPath: string): Promise<IMetadata | undefined> {
     try {
-        const buffer = fs.readFileSync(songPath)
-        const metadata = await mm.parseBuffer(buffer);
+
+        // It's better to do this way (with stream) to improve perf with large files
+        const stream = fs.createReadStream(songPath)
+        const metadata = await mm.parseStream(stream);
 
 
         let picture = "";
@@ -49,7 +51,7 @@ async function metadata(songPath: string): Promise<IMetadata | undefined> {
             picture = await cacheImage(metadata.common!.picture[0].data, `${createImageHash(songPath)}.jpg`)
         }
 
-        if(Number(metadata.format!.duration) >= 7 * 60) return
+        if(Number(metadata.format!.duration) >= 10 * 60) return
 
         let fallbackSongsName = path.basename(songPath).replace(".mp4" , "").split("-").reverse()
 
