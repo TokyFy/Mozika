@@ -1,5 +1,5 @@
 import {IMetadata} from "@electron/main/music";
-import {Radio} from "lucide-react";
+import {Asterisk, Radio} from "lucide-react";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 
 type IMusicCard = IMetadata & {
@@ -69,7 +69,7 @@ function MusicCard({
         <div
             // @ts-ignore
             ref={currentSongsRef}
-            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}>
+            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-1 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}>
 
             {
                 albumArts &&  <div
@@ -89,7 +89,7 @@ function MusicCard({
             <div
                 className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10`}>
                 {isPlaying
-                    ? <Radio className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={20}/>
+                    ? <Asterisk className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={18}/>
                     : <p className="text-xs text-neutral-300 dark:text-neutral-600 font-mono">{index}</p>}
             </div>
 

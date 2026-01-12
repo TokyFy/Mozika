@@ -17,8 +17,8 @@ function Lyrics({open, currentMusics}: ILyrics) {
 
     return (
         <div
-            className={`w-full bg-neutral-50 dark:bg-neutral-950 dark:text-neutral-50 absolute bottom-0 left-0 z-[99] text-sm items-center justify-center text-center duration-100 ease-in-out overflow-hidden ${open ? "h-full" : "h-0"}`}>
-            <div className="h-full py-4 overflow-scroll px-8 italic">
+            className={`w-full bg-neutral-50 dark:bg-neutral-950 dark:text-neutral-50 absolute bottom-0 left-0 z-[99] text-sm justify-center duration-100 ease-in-out overflow-hidden ${open ? "h-full" : "h-0"}`}>
+            <div className="h-full overflow-scroll italic">
                 {
                     lyrics
                         ? lyrics.split("\n")
@@ -26,7 +26,7 @@ function Lyrics({open, currentMusics}: ILyrics) {
                         .map((el) => {
                             return [el.match(/\[\d{2,3}:\d{2,3}\.\d{2,3}]/), el.replace(/\[\d{2,3}:\d{2,3}\.\d{2,3}]/, "")]
                         })
-                        .map((el, index) => <p key={"lyric" + index} className="my-3">{el[1]}</p>)
+                        .map((el, index) => <p key={"lyric" + index} className="my-3 text-center">{el[1]}</p>)
                         : <div className="h-full flex justify-center items-center text-sm"><p>Lyrics not found</p></div>
                 }
             </div>
