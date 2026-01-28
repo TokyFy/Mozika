@@ -12,6 +12,10 @@
     -webkit-app-region: no-drag;
 }
 
+#dragable {
+    -webkit-app-region: drag;
+}
+
 
 body,
 input {

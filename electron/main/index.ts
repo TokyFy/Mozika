@@ -46,17 +46,21 @@ const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = join(process.env.DIST, 'index.html')
 
+const WINDOWS_WIDTH = 375;
+const WINDOWS_HEIGHT = 675;
+
+
 async function createWindow() {
     win = new BrowserWindow({
         title: 'Mozika',
-        width: 375,
-        height: 675,
+        width: WINDOWS_WIDTH,
+        height: WINDOWS_HEIGHT,
         maximizable: false,
         minimizable: false,
-        maxWidth: 375,
-        maxHeight: 675,
-        minWidth: 375,
-        minHeight: 675,
+        maxWidth: WINDOWS_WIDTH,
+        maxHeight: WINDOWS_HEIGHT,
+        minWidth: WINDOWS_WIDTH,
+        minHeight: WINDOWS_HEIGHT,
         frame: false,
         transparent: true,
         icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
@@ -169,16 +173,16 @@ ipcMain.handle('quit', () => {
     app.quit()
 })
 
-ipcMain.handle('scan-musics', async (_event , args) => {
+ipcMain.handle('scan-musics', async (_event, args) => {
 
-    const musics:IMetadata[] = [];
+    const musics: IMetadata[] = [];
 
     const musicsFolders = args.folders as string[]
 
     console.log(musicsFolders)
 
-    for (let folder of musicsFolders ){
-        await audioList(folder, (music)=>{
+    for (let folder of musicsFolders) {
+        await audioList(folder, (music) => {
             if (music) {
                 win?.webContents.send("song-added")
                 musics.push(music);
@@ -186,22 +190,22 @@ ipcMain.handle('scan-musics', async (_event , args) => {
         })
     }
 
-    fs.writeFileSync(path.join(APP_DATA_DIR , "/db.json") , JSON.stringify(musics))
+    fs.writeFileSync(path.join(APP_DATA_DIR, "/db.json"), JSON.stringify(musics))
 
     return musics;
 
 })
 
 
-ipcMain.handle('load-musics', async (_event , args) => {
+ipcMain.handle('load-musics', async (_event, args) => {
 
-    if(fs.existsSync(path.join(APP_DATA_DIR , "/db.json"))) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
+    if (fs.existsSync(path.join(APP_DATA_DIR, "/db.json"))) return JSON.parse(fs.readFileSync("./db.json").toString()) as IMetadata[];
 
     return []
 })
 
 
-ipcMain.handle('select-folder',  () => {
+ipcMain.handle('select-folder', () => {
     return dialog.showOpenDialogSync(
         {
             title: "choose folder",
@@ -209,3 +213,19 @@ ipcMain.handle('select-folder',  () => {
         }
     )
 })
+
+ipcMain.handle('minimal-mode', () => {
+    const WINDOWS_WIDTH = 240;
+    const WINDOWS_HEIGHT = 290;
+
+    win?.setMaximumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
+    win?.setMinimumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT)
+    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, true)
+})
+
+ipcMain.handle('normal-mode', () => {
+    win?.setMaximumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
+    win?.setMinimumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT)
+    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, true)
+})
+

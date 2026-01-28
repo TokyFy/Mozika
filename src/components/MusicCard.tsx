@@ -1,12 +1,84 @@
 import {IMetadata} from "../../electron/main/music";
 import {Circle, Disc, Disc3, Dot, Radio} from "lucide-react";
+import React, {LegacyRef, useCallback, useEffect, useRef, useState} from "react";
 
-type IMusicCard = IMetadata & { isPlaying: boolean, isPaused?: boolean, albumArts?: boolean }
+type IMusicCard = IMetadata & {
+    isPlaying: boolean,
+    isPaused?: boolean,
+    albumArts?: boolean,
+    playerRef: React.RefObject<HTMLAudioElement>
+}
 
-function MusicCard({title, artist, album, picture, file, isPlaying, isPaused, albumArts = true}: IMusicCard) {
+function MusicCard({
+                       title,
+                       artist,
+                       album,
+                       picture,
+                       file,
+                       isPlaying,
+                       isPaused,
+                       albumArts = true,
+                       playerRef
+                   }: IMusicCard) {
+
+    const getAudioCurrentTime = () => {
+        if (playerRef.current) return Number((playerRef.current.currentTime / playerRef.current.duration) * 100).toFixed(2)
+        return 0
+    }
+
+    const setAudioCurrentTime = (time: number) => {
+        if (playerRef.current) {
+            playerRef.current.currentTime = (playerRef.current.duration * (time / 100))
+        }
+    }
+
+
+    const [currentTimePercent, setCurrentTimePercent] = useState(Number(getAudioCurrentTime()))
+    const currentSongsRef: React.MutableRefObject<HTMLElement | undefined> = useRef<HTMLElement>();
+
+    const clickHandler = useCallback((event: MouseEvent) => {
+        const rect = currentSongsRef.current?.getBoundingClientRect();
+        if (rect) setAudioCurrentTime(((event.clientX - rect.left) / rect.width) * 100)
+    }, []);
+
+    let timer: NodeJS.Timeout;
+
+    useEffect(() => {
+        if (isPlaying && playerRef && !isPaused) {
+            timer = setInterval(() => {
+                setCurrentTimePercent(Number(getAudioCurrentTime()))
+            }, 700);
+        } else {
+            clearInterval(timer)
+        }
+
+        if (isPlaying && currentSongsRef.current) {
+            currentSongsRef.current?.addEventListener("click", (event) => clickHandler(event))
+        }
+
+        return () => {
+            if (currentSongsRef.current) currentSongsRef.current?.removeEventListener("click", clickHandler)
+            clearInterval(timer)
+        }
+    }, []);
+
+
     return <>
         <div
-            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm ${isPlaying ? "bg-neutral-200 dark:bg-neutral-950" : "hover:bg-slate-200 dark:hover:bg-neutral-950"}`}>
+            // @ts-ignore
+            ref={currentSongsRef}
+            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-950"}`}>
+
+            {
+                isPlaying &&
+
+                <div
+                    style={{width: `${currentTimePercent}%`}}
+                    className="absolute w-0 h-full bg-neutral-300 dark:bg-black bg-opacity-75 left-0 top-0 duration-100 ease-in transition-all"
+                >
+
+                </div>
+            }
 
             {
                 albumArts && <div>
@@ -16,7 +88,7 @@ function MusicCard({title, artist, album, picture, file, isPlaying, isPaused, al
                             ? <img className="w-full h-auto z-50" src={`app:///${picture}`} alt={""}/>
                             : <div className="absolute flex justify-center items-center z-10 text-inherit">
                                 <Radio size={16}/>
-                        </div>
+                            </div>
                         }
                     </div>
                 </div>
