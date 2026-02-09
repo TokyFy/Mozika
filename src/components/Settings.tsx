@@ -34,7 +34,7 @@ function Settings({scanMusic , menuOpen , toggleMenu} : ISettings) {
     return (
         <div
             className={`rounded-sm bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 text-sm overflow-scroll duration-200 ease-in-out absolute z-[999] w-full left-0  ${menuOpen ? "h-full" : "h-0"}`}>
-            <div className="p-1">
+            <div className="p-1 flex flex-col min-h-full">
                 <div className="flex justify-between items-center my-2">
                     <h1 className="font-bold text-lg  text-center">Settings</h1>
                     <ThemeToggler/>
@@ -52,6 +52,7 @@ function Settings({scanMusic , menuOpen , toggleMenu} : ISettings) {
                         <Shortcut keystroke={"Esc"} action={"Close Search mode"}/>
                         <Shortcut keystroke={"+"} action={"Volume up"}/>
                         <Shortcut keystroke={"-"} action={"Volume down"}/>
+                        <Shortcut keystroke={"l"} action={"Lyrics Mode"}/>
                     </div>
                 </div>
 
@@ -87,6 +88,13 @@ function Settings({scanMusic , menuOpen , toggleMenu} : ISettings) {
                             }
                         </ul>
                     </div>
+                </div>
+
+                <div
+                    className="w-full p-2 text-center text-white bg-neutral-900 rounded-md mt-auto dark:bg-neutral-50 dark:text-neutral-950 cursor-pointer"
+                    onClick={()=>ipcRenderer.invoke("quit")}
+                >
+                    Quit
                 </div>
             </div>
         </div>

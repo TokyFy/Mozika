@@ -80,7 +80,7 @@ function Lyrics({open, currentMusics}: ILyrics) {
                             return [el.match(/\[\d{2,3}:\d{2,3}\.\d{2,3}]/), el.replace(/\[\d{2,3}:\d{2,3}\.\d{2,3}]/, "")]
                         })
                         .map((el, index) => <p key={"lyric" + index} className="my-3">{el[1]}</p>)
-                        : <div className="h-full flex justify-center items-center text-xs"><p>Lyrics not found</p></div>
+                        : <div className="h-full flex justify-center items-center text-sm"><p>Lyrics not found</p></div>
                 }
             </div>
         </div>
