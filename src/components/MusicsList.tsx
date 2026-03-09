@@ -2,7 +2,7 @@ import React from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 import {FixedSizeList as List} from "react-window";
 import MusicCard from "@/components/MusicCard";
-import {IMetadata} from "../../electron/main/music";
+import {IMetadata} from "@electron/main/music";
 
 type IMusicsList = {
     musics: IMetadata[],
@@ -44,7 +44,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
                                             isPaused={isPaused}
-                                            albumArts={index === currentMusicIndex}
+                                            albumArts={true}
                                             playerRef={playerRef}
                                         />
                                     </div>

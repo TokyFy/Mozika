@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import mousetrap from "mousetrap";
 import {useDebounce} from "use-debounce";
 import Fuse from "fuse.js";
-import {IMetadata} from "../../electron/main/music";
+import {IMetadata} from "@electron/main/music";
 import {IAppData} from "@/type/globalState";
 
 type ISearch = {

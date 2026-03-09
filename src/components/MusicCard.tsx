@@ -1,4 +1,4 @@
-import {IMetadata} from "../../electron/main/music";
+import {IMetadata} from "@electron/main/music";
 import {Radio} from "lucide-react";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 
