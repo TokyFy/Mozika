@@ -26,7 +26,7 @@ function App() {
     const player = useRef<HTMLAudioElement>(null);
 
 
-    const [isPaused, setIsPaused] = useState(false)
+    const [isPaused, setIsPaused] = useState(true)
 
     ipcRenderer.on("song-added", () => {
         setSongsCount(songsCount + 1)
@@ -55,7 +55,7 @@ function App() {
 
     const prev = () => {
         const current = (currentMusic - 1) % musics.length;
-        current < 0 ? setCurrentMusic(0) : setCurrentMusic((currentMusic - 1) % (musics.length + 1));
+        current < 0 ? setCurrentMusic(musics.length - 1) : setCurrentMusic((currentMusic - 1) % (musics.length + 1));
     }
 
     const volumeAdd = () => {
@@ -76,17 +76,15 @@ function App() {
             })
         }
     }, [musics]);
+
     useEffect(() => {
-        console.log(keyPressed)
         switch (keyPressed) {
             case "KeyN" :
                 next();
-                setKeyPressed("")
                 break;
 
             case "KeyP" :
                 prev();
-                setKeyPressed("")
                 break;
 
             case "KeyL" :
@@ -95,19 +93,18 @@ function App() {
 
             case "NumpadAdd" :
                 volumeAdd()
-                setKeyPressed("")
                 break;
 
             case "NumpadSubtract" :
                 volumeMinus()
-                setKeyPressed("")
                 break;
 
             case "Tab" :
                 setIsPaused(!isPaused)
-                setKeyPressed("")
                 break;
         }
+
+        setKeyPressed("")
     }, [keyPressed]);
 
     useEffect(() => {
@@ -133,13 +130,17 @@ function App() {
                                 <MusicsList
                                     musics={musics}
                                     currentMusicIndex={currentMusic}
-                                    onItemsClick={index => setCurrentMusic(index)}
+                                    onItemsClick={index => {
+                                        setCurrentMusic(index)
+                                        setIsPaused(false)
+                                    }}
+                                    isPaused={isPaused}
                                 />
                                 <audio
                                     ref={player}
                                     className="hidden"
-                                    autoPlay
                                     controls
+                                    autoPlay={!isPaused}
                                     onEnded={() => next()}
                                     src={`app:///${musics[currentMusic].file}`
                                     }>

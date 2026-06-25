@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 import {FixedSizeList as List} from "react-window";
 import MusicCard from "@/components/MusicCard";
@@ -8,9 +8,11 @@ type IMusicsList = {
     musics : IMetadata[],
     onItemsClick : (index : number) => void,
     currentMusicIndex : number
+    isPaused? : boolean
 }
 
-function MusicsList({musics , currentMusicIndex , onItemsClick} : IMusicsList) {
+function MusicsList({musics , currentMusicIndex , onItemsClick , isPaused} : IMusicsList) {
+
     return (
         <div className="w-full min-h-full my-8">
             {
@@ -35,6 +37,7 @@ function MusicsList({musics , currentMusicIndex , onItemsClick} : IMusicsList) {
                                             picture={musics[index].picture}
                                             file={""}
                                             isPlaying={index === currentMusicIndex}
+                                            isPaused={isPaused}
                                         />
                                     </div>
                                 )
