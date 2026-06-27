@@ -28,7 +28,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                             itemCount={musics?.length}
                             itemSize={52}
                             width={width}
-                            overscanCount={20}
+                            overscanCount={5}
                             ref={listRef}
                         >
                             {
@@ -36,7 +36,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                                     <div style={style} key={index}
                                          onClick={() => onItemsClick(index)}
                                          onContextMenu={()=>onContextMenu(index)}
-                                         className={`flex duration-1000 transition-all border border-dashed ${marker === index ? "border-neutral-300 dark:border-neutral-500" : "border-transparent"} ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800 dark:bg-opacity-25" : ""}`}
+                                         className={`flex duration-1000 transition-all border border-dashed ${marker === index ? "border-neutral-300 dark:border-neutral-500" : "border-transparent"} ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800 dark:bg-opacity-10" : ""}`}
                                     >
                                         <MusicCard
                                             key={"items" + index}

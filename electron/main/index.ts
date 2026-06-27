@@ -221,13 +221,13 @@ ipcMain.handle('minimal-mode', () => {
 
     win?.setMaximumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
     win?.setMinimumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT)
-    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, true)
+    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, false)
 })
 
 ipcMain.handle('normal-mode', () => {
     win?.setMaximumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT);
     win?.setMinimumSize(WINDOWS_WIDTH, WINDOWS_HEIGHT)
-    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, true)
+    win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, false)
 })
 
 
