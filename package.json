@@ -12,7 +12,8 @@
     }
   },
   "scripts": {
-    "dev": "export G_SLICE=always-malloc evolution && vite",
+    "dev": "vite",
+    "unix:dev": "export G_SLICE=always-malloc evolution && vite",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "pree2e": "vite build --mode=test",
