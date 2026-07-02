@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import './App.css'
 import {ipcRenderer} from "electron";
-import {IMetadata} from "../electron/main/music";
+import {IMetadata} from "@electron/main/music";
 import TopBar from "@/components/Topbar";
 import MusicsList from "@/components/MusicsList";
 import mousetrap from "mousetrap";
@@ -25,10 +25,13 @@ function App() {
     // For loading purpose
     const [songsCount, setSongsCount] = useState(0)
     const [menuOpen, setMenuOpen] = useState(false);
+
+    // TODO : merge these two state
     const [searchMode, setSearchMode] = useState(false);
+    const [searchResultIndex, setSearchResultIndex] = useState(-1)
+
     const [minimalMode, setMinimalMode] = useState(false);
     const [lyricsMode, setLyricsMode] = useState(false)
-
 
 
     // // The Audio element reference (For play/pause/volume controls)
@@ -94,6 +97,13 @@ function App() {
         }
     }
 
+    const enQueue = (index : number , padding : number) => {
+        let musics = [...appData.musics];
+        [musics[index] , musics[appData.currentMusic + padding]] =  [musics[appData.currentMusic + padding] , musics[index]];
+
+        setAppData({...appData , musics : musics})
+    }
+
 
     useEffect(() => {
 
@@ -103,6 +113,17 @@ function App() {
         })()
 
     }, []);
+
+    useEffect(() => {
+
+    }, []);
+
+    useEffect(() => {
+        if (listRef.current) {
+            // @ts-ignore
+            listRef.current.scrollToItem(searchResultIndex, "center");
+        }
+    }, [searchResultIndex]);
 
     useEffect(() => {
         setAppData({...appData, isPaused: false})
@@ -166,10 +187,10 @@ function App() {
             ipcRenderer.invoke("minimal-mode").then()
         }
     })
-    mousetrap.bind('l', ()=>{
+    mousetrap.bind('l', () => {
         setLyricsMode(!lyricsMode)
     });
-    mousetrap.bind('esc', ()=>{
+    mousetrap.bind('esc', () => {
         setLyricsMode(false);
         setSearchMode(false)
     });
@@ -185,7 +206,11 @@ function App() {
                 && <Minimal music={appData.musics[appData.currentMusic]} isPaused={appData.isPaused}/>
             }
 
-            <TopBar onMenuClick={() => setMenuOpen(!menuOpen)}/>
+            <TopBar
+                onMenuClick={() => {
+                    setMenuOpen(!menuOpen);
+                    setSearchMode(false)
+                }}/>
 
             <div className={`flex flex-col grow mx-1 mb-1 relative ${searchMode ? "gap-1" : ""}`}>
 
@@ -196,6 +221,7 @@ function App() {
                 />
 
                 <Search
+                    setResult={(index) => setSearchResultIndex(index)}
                     setSearchMode={(value) => setSearchMode(value)}
                     searchMode={searchMode && !minimalMode && !lyricsMode}
                     setAppData={(data) => setAppData(data)}
@@ -218,6 +244,8 @@ function App() {
                                     isPaused={appData.isPaused}
                                     listRef={listRef}
                                     playerRef={player}
+                                    marker={searchMode ? searchResultIndex : -1}
+                                    onContextMenu={index => {enQueue(index , 1)}}
                                 />
                                 <audio
                                     ref={player}
@@ -240,7 +268,8 @@ function App() {
                 </div>
 
                 {
-                    Boolean(appData.musics.length) && <Lyrics open={lyricsMode && !minimalMode} currentMusics={appData.musics[appData.currentMusic]}/>
+                    Boolean(appData.musics.length) &&
+                    <Lyrics open={lyricsMode && !minimalMode} currentMusics={appData.musics[appData.currentMusic]}/>
                 }
 
             </div>

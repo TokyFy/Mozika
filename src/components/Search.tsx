@@ -12,9 +12,10 @@ type ISearch = {
     appData : IAppData,
     loadMusics : () => Promise<IMetadata[]>
     minimalMode ?: boolean
+    setResult : (index : number) => void
 }
 
-function Search({setSearchMode , searchMode , setAppData , appData , loadMusics , minimalMode} : ISearch) {
+function Search({setSearchMode , searchMode , setAppData , appData , loadMusics , minimalMode , setResult} : ISearch) {
 
     const [query, setQuery] = useState('');
     const [dQuery] = useDebounce(query, 500);
@@ -25,27 +26,18 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
     useEffect(() => {
         (async () => {
             if (!fuse) {
-                fuse = new Fuse(await loadMusics(), {
+                fuse = new Fuse(appData.musics, {
                     keys: ['title', 'artist', 'album'],
-                    threshold: .5
+                    threshold: .5,
                 });
             }
 
-            dQuery.trim() !== ""
-                ? setAppData(
-                    {
-                        ...appData,
-                        musics: [...fuse.search(dQuery).map(el => el.item), appData.musics[appData.currentMusic]],
-                        currentMusic: 0,
-                        isPaused: false
-                    })
-                : setAppData(
-                    {
-                        ...appData,
-                        musics: await loadMusics(),
-                        currentMusic: 0,
-                        isPaused: true
-                    })
+            if (dQuery.trim() !== "") {
+                const result = fuse.search(dQuery, {limit: 1})
+                setResult(result[0].refIndex || -1)
+            } else {
+                setResult(appData.currentMusic)
+            }
         })()
     }, [dQuery]);
 
@@ -60,10 +52,6 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
             }
         }
     });
-
-    // mousetrap.bind('esc', (_event) => {
-    //     setSearchMode({state: false})
-    // });
 
     return (
         <div
