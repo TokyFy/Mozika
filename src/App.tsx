@@ -2,31 +2,44 @@ import {useEffect, useRef, useState} from 'react'
 import './App.css'
 import {ipcRenderer} from "electron";
 import {IMetadata} from "../electron/main/music";
-import Topbar from "@/components/Topbar";
+import TopBar from "@/components/Topbar";
 import MusicsList from "@/components/MusicsList";
+import {FolderClosed, FolderDown, FolderPlus, FolderSync, FolderX} from "lucide-react";
 
+
+type IAppData = {
+    musics: IMetadata[],
+    onScanningMusics: boolean,
+    currentMusic: number,
+    volume: number,
+    isPaused: boolean
+}
 
 function App() {
 
-    const [musics, setMusics] = useState<IMetadata[]>([])
-    const [onScanningMusics, setOnScanningMusics] = useState(false)
+    const states = {
+        musics: [],
+        onScanningMusics: false,
+        currentMusic: 0,
+        volume: 1,
+        isPaused: true
+    }
 
-    // Index of the current song in the Musics[]
-    const [currentMusic, setCurrentMusic] = useState(0);
+    const [appData, setAppData] = useState<IAppData>(states)
 
     // Hold the key code of the Key event
-    const [keyPressed, setKeyPressed] = useState<{code : string}>()
-
+    const [keyPressed, setKeyPressed] = useState<{ code: string }>()
     // For loading purpose
     const [songsCount, setSongsCount] = useState(0)
 
-    const [volume, setVolume] = useState(1)
+    const [musicsFolders, setMusicsFolders] = useState<string[]>([])
 
-    // The Audio element reference (For play/pause/volume controls)
+    // // The Audio element reference (For play/pause/volume controls)
     const player = useRef<HTMLAudioElement>(null);
+    const listRef = useRef<HTMLElement>();
 
+    const [menuOpen, setMenuOpen] = useState(false)
 
-    const [isPaused, setIsPaused] = useState(true)
 
     ipcRenderer.on("song-added", () => {
         setSongsCount(songsCount + 1)
@@ -37,57 +50,89 @@ function App() {
     }
 
     async function scanMusic() {
-        setMusics([])
-        const folder = await ipcRenderer.invoke("select-folder");
+        setAppData({...appData, musics: [], onScanningMusics: true, currentMusic: 0})
 
-        if (folder) {
-            setOnScanningMusics(true)
+        const musics = await ipcRenderer.invoke("scan-musics", {
+            folders: musicsFolders
+        }) as IMetadata[]
 
-            const musics = await ipcRenderer.invoke("scan-musics", {
-                folder: folder[0]
-            }) as IMetadata[]
-
-            setMusics(musics)
-
-            setOnScanningMusics(false);
-        }
-
+        setAppData({...appData, musics: [...musics], onScanningMusics: false})
     }
 
-
-
     const next = () => {
-        setCurrentMusic((currentMusic + 1) % musics.length)
+        setAppData({...appData, currentMusic: (appData.currentMusic + 1) % appData.musics.length})
     }
 
     const prev = () => {
-        const current = (currentMusic - 1) % musics.length;
-        current < 0 ? setCurrentMusic(musics.length - 1) : setCurrentMusic((currentMusic - 1) % (musics.length + 1));
+        const current = (appData.currentMusic - 1) % appData.musics.length;
+        current < 0
+            ? setAppData({...appData, currentMusic: appData.musics.length - 1}) :
+            setAppData({...appData, currentMusic: (appData.currentMusic - 1) % (appData.musics.length + 1)})
     }
 
-    const volumeAdd = () => {
-        volume + 0.1 <= 1 ? setVolume(Number((volume + 0.1).toFixed(2))) : setVolume(1)
-    }
+    const shuffleArray = (array: any[]) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
 
-    const volumeMinus = () => {
-        volume - 0.1 >= 0 ? setVolume(Number((volume - 0.1).toFixed(2))) : setVolume(0)
+        return array
     }
 
     useEffect(() => {
-        (async ()=>{
+        if (listRef.current) { // @ts-ignore
+            listRef.current.scrollToItem(appData.currentMusic, "auto");
+        }
+    }, [appData.currentMusic]);
+
+    const volumeAdd = () => {
+        appData.volume + 0.1 <= 1
+            ? setAppData({...appData, volume: Number((appData.volume + 0.1).toFixed(2))})
+            : setAppData({...appData, volume: 1})
+    }
+
+    const volumeMinus = () => {
+        appData.volume - 0.1 >= 0
+            ? setAppData({...appData, volume: Number((appData.volume - 0.1).toFixed(2))})
+            : setAppData({...appData, volume: 0})
+    }
+
+    const addFolders = async () => {
+        const folder = await ipcRenderer.invoke("select-folder");
+
+        if (folder) {
+            setMusicsFolders([...musicsFolders, folder[0]])
+        }
+    }
+
+    useEffect(() => {
+        // console.log(appData)
+    }, [menuOpen]);
+
+    useEffect(() => {
+        (async () => {
             const musics = await loadMusics();
-            setMusics(musics)
+            setAppData({...appData, musics})
         })()
+
+        const folders = JSON.parse(`${localStorage.getItem("folders")}`) as string[] || []
+        setMusicsFolders(folders)
 
     }, []);
 
     useEffect(() => {
-        if (musics.length) {
+        localStorage.setItem("folders", JSON.stringify(musicsFolders))
+    }, [musicsFolders]);
+
+    useEffect(() => {
+        if (appData.musics.length) {
             document.addEventListener("keydown", event => {
-                setKeyPressed({code : event.code})
+                setKeyPressed({code: event.code})
             })
         }
-    }, [musics]);
+
+        setSongsCount(0)
+    }, [appData.musics]);
 
     useEffect(() => {
         switch (keyPressed?.code) {
@@ -111,8 +156,29 @@ function App() {
                 volumeMinus()
                 break;
 
+            case "KeyS" :
+                setAppData({
+                    ...appData,
+                    musics: [...shuffleArray(appData.musics)],
+                    currentMusic : 0
+                })
+                break;
+
+            case "KeyO" :
+                setAppData({
+                        ...appData,
+                        musics: [...appData.musics.sort(
+                            (a, b) => {
+                                return a.title < b.title ? -1 : 1
+                            }
+                        )
+                        ]
+                    }
+                )
+                break;
+
             case "Tab" :
-                setIsPaused(!isPaused)
+                setAppData({...appData, isPaused: !appData.isPaused})
                 break;
         }
     }, [keyPressed]);
@@ -120,39 +186,78 @@ function App() {
     useEffect(() => {
         if (player.current) {
             const audio = player.current;
-            audio.volume = volume;
-            isPaused ?  audio.pause() : audio.play()
+            audio.volume = appData.volume;
+            appData.isPaused ? audio.pause() : audio.play()
         }
-    }, [volume , isPaused]);
+    }, [appData.volume, appData.isPaused]);
 
     return (
         <div
             className='w-full h-full text-neutral-900 flex flex-col overflow-hidden rounded-sm bg-neutral-50 border-4 border-solid border-neutral-200'>
 
-            <Topbar/>
+            <TopBar onMenuClick={() => setMenuOpen(!menuOpen)}/>
 
-            <div className={`flex flex-col grow m-1`}>
+            <div className={`flex flex-col grow m-1 h-0`}>
+                <div
+                    className={`rounded-sm bg-neutral-100 text-neutral-800 mx-1 text-sm overflow-hidden duration-500 ${menuOpen ? "h-full" : "h-0"}`}>
+                    <div className="p-1">
+                        <p className="text-md underline">Preferences</p>
+
+                        <div className="py-4">
+                            <div className="flex justify-between items-center">
+                                <p>Musics Directories :</p>
+                                <div className="text-xs underline cursor-pointer flex gap-4">
+                                    <p onClick={() => {
+                                        addFolders().then();
+                                    }}>
+                                        <FolderPlus size={18}/>
+                                    </p>
+
+                                    <p onClick={() => {
+                                        scanMusic().then();
+                                        setMenuOpen(false)
+                                    }}>
+                                        <FolderSync size={18}/>
+                                    </p>
+
+                                    <p onClick={() => {
+                                        setMusicsFolders([])
+                                    }}>
+                                        <FolderX size={18}/>
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <ul className="text-xs list-disc list-inside py-2">
+                                    {
+                                        musicsFolders.map((el, index) => <li key={index}>{el}</li>)
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div
                     className={`grow flex justify-center items-center rounded-[4px] h-0 overflow-hidden duration-300`}>
                     {
-                        Boolean(musics.length) ?
+                        Boolean(appData.musics.length) ?
                             <>
                                 <MusicsList
-                                    musics={musics}
-                                    currentMusicIndex={currentMusic}
+                                    musics={appData.musics}
+                                    currentMusicIndex={appData.currentMusic}
                                     onItemsClick={index => {
-                                        setCurrentMusic(index)
-                                        setIsPaused(false)
+                                        setAppData({...appData, currentMusic: index, isPaused: false})
                                     }}
-                                    isPaused={isPaused}
+                                    isPaused={appData.isPaused}
+                                    listRef={listRef}
                                 />
                                 <audio
                                     ref={player}
                                     className="hidden"
                                     controls
-                                    autoPlay={!isPaused}
+                                    autoPlay={!appData.isPaused}
                                     onEnded={() => next()}
-                                    src={`app:///${musics[currentMusic].file}`
+                                    src={`app:///${appData.musics[appData.currentMusic].file}`
                                     }>
                                 </audio>
                             </>
@@ -161,7 +266,7 @@ function App() {
                                 <p
                                     className="text-xs font-mono font-bold text-neutral-400 cursor-pointer"
                                 >
-                                    {onScanningMusics ? `Loading... [${songsCount} songs]` : "Add songs ..."}
+                                    {appData.onScanningMusics ? `Loading... [${songsCount} songs]` : "Add songs ..."}
                                 </p>
                             </>
                     }
