@@ -8,6 +8,7 @@ async function audioList(dir: string, callback: (musics: IMetadata | undefined) 
     const files = fs.readdirSync(dir);
     for (const file of files) {
         try {
+
             const filePath = path.join(dir, file);
 
             const fileStat = fs.statSync(filePath);
@@ -24,6 +25,7 @@ async function audioList(dir: string, callback: (musics: IMetadata | undefined) 
         } catch (err) {
             // Do things Here
         }
+
     }
 }
 
