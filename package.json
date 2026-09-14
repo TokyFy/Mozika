@@ -19,6 +19,20 @@
     "pree2e": "vite build --mode=test",
     "e2e": "playwright test"
   },
+  "build": {
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        }
+      ]
+    }
+  },
   "dependencies": {
     "@types/mousetrap": "^1.6.15",
     "cross-env": "^7.0.3",
