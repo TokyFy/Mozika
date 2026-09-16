@@ -8,7 +8,6 @@ import mousetrap from "mousetrap";
 import Settings from "@/components/Settings";
 import {IAppData} from "@/type/globalState";
 import Search from "@/components/Search";
-import {Radio} from "lucide-react";
 import Minimal from "@/components/Minimal";
 
 function App() {
@@ -165,7 +164,7 @@ function App() {
     return (
         <div
             id="main-frame"
-            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-200 bg-neutral-50 gap-1 dark:border-neutral-700 dark:bg-neutral-900 ${minimalMode.state ? "border-2" : "border-4"}`}>
+            className={`h-full relative text-neutral-900 flex flex-col overflow-hidden rounded-sm border-solid border-neutral-200 bg-neutral-50 gap-1 dark:border-neutral-950 dark:bg-neutral-950 ${minimalMode.state ? "border-2" : "border-4"}`}>
 
             {
                 Boolean(appData.musics.length && minimalMode.state)
@@ -174,7 +173,7 @@ function App() {
 
             <TopBar onMenuClick={() => setMenuOpen({state: !menuOpen.state})}/>
 
-            <div className={`flex flex-col grow mx-1 mb-1 relative gap-1`}>
+            <div className={`flex flex-col grow mx-1 mb-1 relative ${searchMode.state ? "gap-1" : ""}`}>
 
                 <Settings
                     scanMusic={scanMusic}
@@ -192,7 +191,7 @@ function App() {
                 />
 
                 <div
-                    className={`grow flex justify-center items-center overflow-hidden duration-300`}>
+                    className={`grow flex justify-center items-center overflow-hidden duration-300 bg-neutral-50 dark:bg-neutral-950 z-10 ${searchMode.state ? "translate-y-9" : ""}`}>
                     {
                         Boolean(appData.musics.length) ?
                             <>

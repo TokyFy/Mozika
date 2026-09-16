@@ -67,7 +67,7 @@ function Search({setSearchMode , searchMode , setAppData , appData , loadMusics 
 
     return (
         <div
-            className={`overflow-hidden duration-200 rounded-sm bg-white dark:bg-neutral-800 ${searchMode ? "h-[34px]" : "h-0"}`}>
+            className={`absolute w-full -z-1 overflow-hidden duration-200 rounded-sm bg-white dark:bg-neutral-800 h-8`}>
             <div className="h-full border border-neutral-200 border-solid dark:border-neutral-600">
                 <input
                     onKeyDown={(event) => {

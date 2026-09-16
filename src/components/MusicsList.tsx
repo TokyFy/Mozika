@@ -26,7 +26,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                             itemCount={musics?.length}
                             itemSize={52}
                             width={width}
-                            overscanCount={5}
+                            overscanCount={15}
                             ref={listRef}
                             useIsScrolling={true}
                         >
@@ -34,7 +34,7 @@ function MusicsList({musics, currentMusicIndex, onItemsClick, isPaused, listRef 
                                 ({index, style, isScrolling}) => (
                                     <div style={style} key={index}
                                          onClick={() => onItemsClick(index)}
-                                         className={`flex ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800 dark:bg-opacity-25" : ""}`}
+                                         className={`flex duration-1000 transition-all ${index % 2 === 0 ? "bg-neutral-100 dark:bg-neutral-800 dark:bg-opacity-25" : ""}`}
                                     >
                                         <MusicCard
                                             key={"items" + index} title={musics[index].title}

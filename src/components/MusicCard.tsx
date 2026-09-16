@@ -1,6 +1,6 @@
 import {IMetadata} from "../../electron/main/music";
-import {Circle, Disc, Disc3, Dot, Radio} from "lucide-react";
-import React, {LegacyRef, useCallback, useEffect, useRef, useState} from "react";
+import {Radio} from "lucide-react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 
 type IMusicCard = IMetadata & {
     isPlaying: boolean,
@@ -67,7 +67,7 @@ function MusicCard({
         <div
             // @ts-ignore
             ref={currentSongsRef}
-            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-950"}`}>
+            className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-800"}`}>
 
             {
                 albumArts &&  <div
@@ -94,7 +94,7 @@ function MusicCard({
 
                 <div
                     style={{width: `${currentTimePercent}%`}}
-                    className="absolute w-0 z-0 h-full bg-neutral-300 dark:bg-black bg-opacity-75 left-0 top-0 duration-100 ease-in transition-all"
+                    className="absolute w-0 z-0 h-[2px] bg-neutral-950 dark:bg-neutral-50 rounded-full left-0 bottom-0 duration-100 ease-in transition-all"
                 >
 
                 </div>

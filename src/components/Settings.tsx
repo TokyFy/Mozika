@@ -33,7 +33,7 @@ function Settings({scanMusic , menuOpen , toggleMenu} : ISettings) {
 
     return (
         <div
-            className={`rounded-sm bg-neutral-50 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-100 text-sm overflow-scroll duration-200 ease-in-out absolute z-50 w-full left-0  ${menuOpen ? "h-full" : "h-0"}`}>
+            className={`rounded-sm bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 text-sm overflow-scroll duration-200 ease-in-out absolute z-[999] w-full left-0  ${menuOpen ? "h-full" : "h-0"}`}>
             <div className="p-1">
                 <div className="flex justify-between items-center my-2">
                     <h1 className="font-bold text-lg  text-center">Settings</h1>
