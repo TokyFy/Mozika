@@ -70,27 +70,14 @@ function MusicCard({
             className={`group/mc overflow-hidden relative grow flex max-w-full gap-2 text-sm items-center px-2 p-1 cursor-pointer duration-500 ease-in rounded-sm border border-solid ${isPlaying ? "border-neutral-300 dark:border-neutral-700" : "border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-950"}`}>
 
             {
-                isPlaying &&
-
-                <div
-                    style={{width: `${currentTimePercent}%`}}
-                    className="absolute w-0 h-full bg-neutral-300 dark:bg-black bg-opacity-75 left-0 top-0 duration-100 ease-in transition-all"
-                >
-
-                </div>
-            }
-
-            {
-                albumArts && <div>
-                    <div
-                        className={`aspect-square w-9 rounded-sm flex justify-center items-center overflow-hidden text-neutral-400  group-hover/mc:bg-neutral-100 dark:group-hover/mc:bg-neutral-300 duration-500 ${isPlaying ? "bg-neutral-50" : "bg-neutral-200 dark:bg-neutral-700"}`}>
-                        {picture
-                            ? <img className="w-full h-auto z-50" src={`app:///${picture}`} alt={""}/>
-                            : <div className="absolute flex justify-center items-center z-10 text-inherit">
-                                <Radio size={16}/>
-                            </div>
-                        }
-                    </div>
+                albumArts &&  <div
+                    className={`aspect-square w-9 z-50 rounded-sm flex justify-center items-center overflow-hidden text-neutral-400  group-hover/mc:bg-neutral-100 dark:group-hover/mc:bg-neutral-300 duration-500 ${isPlaying ? "bg-neutral-50" : "bg-neutral-200 dark:bg-neutral-700"}`}>
+                    {picture
+                        ? <img className="w-full h-auto z-50" src={`app:///${picture}`} alt={""}/>
+                        : <div className="absolute flex justify-center items-center z-50 text-inherit">
+                            <Radio size={16}/>
+                        </div>
+                    }
                 </div>
             }
             <div className="overflow-ellipsis max-w-[75%] z-10">
@@ -101,6 +88,17 @@ function MusicCard({
                 className={`ml-auto items-center justify-center p-2 text-neutral-800 dark:text-neutral-200 flex z-10 ${isPlaying ? "opacity-100" : "hidden"}`}>
                 <Radio className={`${isPaused ? "opacity-25" : "opacity-100"}`} size={20}/>
             </div>
+
+            {
+                isPlaying &&
+
+                <div
+                    style={{width: `${currentTimePercent}%`}}
+                    className="absolute w-0 z-0 h-full bg-neutral-300 dark:bg-black bg-opacity-75 left-0 top-0 duration-100 ease-in transition-all"
+                >
+
+                </div>
+            }
 
         </div>
     </>
