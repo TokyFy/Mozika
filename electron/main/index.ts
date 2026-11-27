@@ -5,6 +5,7 @@ import {update} from './update'
 import {audioList, IMetadata} from "./music";
 import fs from "node:fs"
 import {APP_DATA_DIR} from "./Contant";
+import {lyricsFile} from "./utils";
 
 const {protocol, net} = require('electron');
 
@@ -229,3 +230,12 @@ ipcMain.handle('normal-mode', () => {
     win?.setSize(WINDOWS_WIDTH, WINDOWS_HEIGHT, true)
 })
 
+
+ipcMain.handle("get-lyrics" , (event, args) => {
+    // Todo : read lyrics from the audio file and write it into [audioName].lrc next to it
+    const lyricsPath = lyricsFile(args)
+
+    if(fs.existsSync(lyricsPath)) {
+        return  fs.readFileSync(lyricsPath).toString()
+    }
+})
